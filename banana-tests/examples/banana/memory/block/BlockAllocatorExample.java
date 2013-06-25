@@ -20,7 +20,8 @@ public class BlockAllocatorExample {
 
     // fill up the block with some ints
     for (int offset = 0; offset < blockSize; offset++) {
-      allocator.setInt(pointer1, offset, offset * 2);
+      int data = offset * 2;
+      allocator.setInt(pointer1, offset, data);
     }
 
     // set a long at offset 5, will use two ints
