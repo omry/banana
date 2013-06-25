@@ -10,6 +10,11 @@ public class MemoryAllocatorsExample {
 
   public static void main(String[] args) {
 
+    /**
+     * Use several IMemAllocators, which can be used to allocate variable length memory blocks
+     * (Unlike block allocators, which can be used for fixed size blocks only)
+     */
+
     IMemAllocator allocator1 = new ChainedAllocator(MAX_BLOCKS, BLOCK_SIZE, GROWTH_FACTOR);
     testAllocator(allocator1);
 
