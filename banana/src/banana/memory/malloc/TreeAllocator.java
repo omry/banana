@@ -732,37 +732,47 @@ public class TreeAllocator implements IMemAllocator {
   @Override
   public String pointerDebugString(int pointer) {
     StringBuilder sb = new StringBuilder();
-    Queue<Integer> thisLevel = new LinkedList<Integer>();
-    thisLevel.add(pointer);
-
-    Queue<Integer> nextLevel = new LinkedList<Integer>();
-    while (!thisLevel.isEmpty()) {
-      for (int next : thisLevel) {
-        if (next < 0) {
-          int indexPointer = ~next;
-          int nb = m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
-          int memSize = nb * m_blockSize;
-          int maxCapacityFor = maximumCapacityForNumBlocks(nb) / m_indexBlockCapacity;
-          int numBlocks = 1 + ((memSize - 1) / maxCapacityFor); // ceil(a/b)
-          for (int i = 0; i < numBlocks; i++) {
-            int child = m_blocks.getInt(indexPointer, i + INDEX_DATA_OFFSET);
-            nextLevel.add(child);
-          }
-          sb.append("[NB=").append(nb).append(", NC=").append(numBlocks).append("]");
-        } else {
-          sb.append("[");
-          for (int i = 0; i < m_blockSize; i++) {
-            sb.append(m_blocks.getInt(next, i));
-            if (i + 1 < m_blockSize)
-              sb.append(",");
-          }
-          sb.append("] ");
-        }
+    if (pointer > 0) {
+      sb.append("[");
+      for (int i = 0; i < m_blockSize; i++) {
+        sb.append(m_blocks.getInt(pointer, i));
+        if (i + 1 < m_blockSize)
+          sb.append(",");
       }
-      thisLevel.clear();
-      thisLevel.addAll(nextLevel);
-      nextLevel.clear();
-      sb.append("\n");
+      sb.append("] ");
+    } else {
+      Queue<Integer> thisLevel = new LinkedList<Integer>();
+      thisLevel.add(pointer);
+
+      Queue<Integer> nextLevel = new LinkedList<Integer>();
+      while (!thisLevel.isEmpty()) {
+        for (int next : thisLevel) {
+          if (next < 0) {
+            int indexPointer = ~next;
+            int nb = m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
+            int memSize = nb * m_blockSize;
+            int maxCapacityFor = maximumCapacityForNumBlocks(nb) / m_indexBlockCapacity;
+            int numBlocks = 1 + ((memSize - 1) / maxCapacityFor); // ceil(a/b)
+            for (int i = 0; i < numBlocks; i++) {
+              int child = m_blocks.getInt(indexPointer, i + INDEX_DATA_OFFSET);
+              nextLevel.add(child);
+            }
+            sb.append("[NB=").append(nb).append(", NC=").append(numBlocks).append("]");
+          } else {
+            sb.append("[");
+            for (int i = 0; i < m_blockSize; i++) {
+              sb.append(m_blocks.getInt(next, i));
+              if (i + 1 < m_blockSize)
+                sb.append(",");
+            }
+            sb.append("] ");
+          }
+        }
+        thisLevel.clear();
+        thisLevel.addAll(nextLevel);
+        nextLevel.clear();
+        sb.append("\n");
+      }
     }
 
     return sb.toString();
