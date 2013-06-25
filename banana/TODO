@@ -1,0 +1,17 @@
+evaluate interesting use cases enabled by compressed pointers
+  more efficient MultiSize allocator
+optimize malloc/read/write/free allocators
+  
+Implement MultiList:
+  tests
+  
+Implement and test MemCopy for IMemAllocator
+Implement Double and Float in IPrimitiveAccess
+Implement Set
+
+Memory allocation:
+  ByteBuffer allocator
+  Unsafe Allocator
+  Memory mapped file allocator?
+
+When API stable complete tests and documentation

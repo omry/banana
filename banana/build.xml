@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="banana" default="build">
+
+	<target name="build" description="Compiles and pack">
+
+		<loadproperties srcfile="build.properties" />
+
+		<mkdir dir="build/" />
+		<mkdir dir="build/classes" />
+
+		<javac includeantruntime="false" srcdir="src" destdir="build/classes" debug="off" optimize="true" target="1.5" />
+
+		<jar destfile="build/${name}-${version}.jar"  basedir="build/classes">
+		</jar>
+
+		<zip destfile="build/${name}-${version}-src.zip" basedir="src" includes="**/*.java" />
+	</target>
+
+	<target name="clean">
+		<deltree dir="build" />
+	</target>
+
+</project>
