@@ -41,15 +41,15 @@ public class Benchmark {
   public static Collection<Object[]> data() {
     //@formatter:off
     Object[][] data = new Object[][] {
-        {100},
-        {1000},
-        {10000},
-        {100000},
-        {1000000},
-        {6500000},
+//        {100},
+//        {1000},
+//        {10000},
+//        {100000},
+//        {1000000},
+//        {6500000},
         {10000000},
-        {50000000},
-        {100000000},
+//        {50000000},
+//        {100000000},
     };
     return Arrays.asList(data);
   }
@@ -80,7 +80,14 @@ public class Benchmark {
         throw new RuntimeException("failed");
       key.reset();
     }
-    System.out.println("Memory used by banana varkey hashmap : " + h.computeMemoryUsage());
+
+
+    System.gc();
+    System.out.println(h.size());
+    MemoryMXBean mx = ManagementFactory.getMemoryMXBean();
+    MemoryUsage usage = mx.getHeapMemoryUsage();
+    System.out.println("Memory used by banana varkey hashmap : " + usage.getUsed());
+    System.out.println("Reported memory by banana varkey hashmap : " + h.computeMemoryUsage());
   }
 
 

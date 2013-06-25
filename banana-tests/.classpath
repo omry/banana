@@ -2,6 +2,7 @@
 <classpath>
 	<classpathentry excluding="IndexMessages.java" kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
+	<classpathentry kind="src" path="examples"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/banana"/>
 	<classpathentry kind="lib" path="/vizi_java_utils/lib/commons-csv-1.0-20130503.012100-198.jar" sourcepath="/vizi_java_utils/lib/commons-csv-1.0-20130503.012100-198-sources.jar"/>

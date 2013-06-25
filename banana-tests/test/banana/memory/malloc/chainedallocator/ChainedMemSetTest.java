@@ -1,7 +1,6 @@
 package banana.memory.malloc.chainedallocator;
 
 import banana.memory.initializers.MemSetInitializer;
-import banana.memory.malloc.AbstractMemAllocatorTest;
 import banana.memory.malloc.AbstractMemSetTest;
 import banana.memory.malloc.ChainedAllocator;
 
