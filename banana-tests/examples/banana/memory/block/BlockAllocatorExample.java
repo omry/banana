@@ -51,6 +51,12 @@ public class BlockAllocatorExample {
     // garbage collector, but it's the right thing to do.
     allocator.free(pointer1);
     allocator.free(pointer2);
+
+//    OUTPUT:
+//    First block:
+//    [0,2,4,6,8,-1,-1,14,16,18]
+//    Second block:
+//    [0,2,4,6,8,9,9,9,9,9]
   }
 
   protected static void printBlock(IBlockAllocator allocator, int pointer) {
