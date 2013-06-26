@@ -1,6 +1,9 @@
 package banana.memory.malloc;
 
-import banana.memory.IMemAllocator;
+import net.yadan.banana.memory.IMemAllocator;
+import net.yadan.banana.memory.malloc.ChainedAllocator;
+import net.yadan.banana.memory.malloc.MultiSizeAllocator;
+import net.yadan.banana.memory.malloc.TreeAllocator;
 
 public class MemoryAllocatorsExample {
 

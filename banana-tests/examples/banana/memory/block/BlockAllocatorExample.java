@@ -1,7 +1,8 @@
 package banana.memory.block;
 
-import banana.memory.IBlockAllocator;
-import banana.memory.initializers.MemSetInitializer;
+import net.yadan.banana.memory.IBlockAllocator;
+import net.yadan.banana.memory.block.BlockAllocator;
+import net.yadan.banana.memory.initializers.MemSetInitializer;
 
 public class BlockAllocatorExample {
   public static void main(String[] args) {
