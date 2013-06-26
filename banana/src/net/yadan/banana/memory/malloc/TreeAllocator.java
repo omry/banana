@@ -688,6 +688,7 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public int maximumCapacityFor(int pointer) {
+    // TODO: can we just retuyrn numBlocks here instead of doing all this crap?
     int capacity = 0;
     if (pointer < 0) {
       int indexPointer = ~pointer;
