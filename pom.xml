@@ -13,7 +13,7 @@
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
 
-  <name>${artifactId}</name>
+  <name>${project.artifactId}</name>
   <description>A primitive collection library with it's own memory management</description>
   <inceptionYear>2013</inceptionYear>
 
