@@ -861,7 +861,6 @@ public class Util {
      * underlying output stream with the specified buffer size.
      *
      * @param out the underlying output stream.
-     * @param size the buffer size.
      * @exception IllegalArgumentException if size &lt;= 0.
      */
     public BuffedOutputStream2(OutputStream out, byte buffer[]) {
@@ -1023,7 +1022,7 @@ public class Util {
    * @return the number of seconds in the specified string (10m = 60 seconds)
    */
   public static int getSeconds(String s) {
-    int k = 0;
+    int k;
     if (s.length() == 1)
       return Integer.parseInt(s);
 

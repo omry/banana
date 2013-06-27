@@ -17,7 +17,22 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="banana" />
+        <module name="banana-examples" />
+        <module name="banana-tests" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="banana" target="1.6" />
+      <module name="banana-examples" target="1.6" />
+      <module name="banana-parent" target="1.6" />
+      <module name="banana-tests" target="1.7" />
+    </bytecodeTargetLevel>
   </component>
 </project>
 

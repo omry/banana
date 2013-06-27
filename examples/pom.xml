@@ -1,24 +1,28 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>net.yadan.banana</groupId>
-    <artifactId>banana-parent</artifactId>
-    <version>0.1-SNAPSHOT</version>
-  </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>net.yadan.banana</groupId>
+        <artifactId>banana-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-  <artifactId>banana-examples</artifactId>
-  <packaging>jar</packaging>
+    <artifactId>banana-examples</artifactId>
+    <packaging>jar</packaging>
 
-  <properties>
-    <air.main.basedir>${project.parent.basedir}</air.main.basedir>
-  </properties>
+    <build>
+        <sourceDirectory>src</sourceDirectory>
+    </build>
 
-  <dependencies>
-    <dependency>
-      <groupId>net.yadan.banana</groupId>
-      <artifactId>banana-core</artifactId>
-    </dependency>
-  </dependencies>
+    <properties>
+        <air.main.basedir>${project.parent.basedir}</air.main.basedir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>net.yadan.banana</groupId>
+            <artifactId>banana-core</artifactId>
+        </dependency>
+    </dependencies>
 </project>

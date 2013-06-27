@@ -3,8 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/banana/banana.iml" filepath="$PROJECT_DIR$/banana/banana.iml" />
+      <module fileurl="file://$PROJECT_DIR$/examples/banana-examples.iml" filepath="$PROJECT_DIR$/examples/banana-examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/banana-parent.iml" filepath="$PROJECT_DIR$/banana-parent.iml" />
       <module fileurl="file://$PROJECT_DIR$/banana-tests/banana-tests.iml" filepath="$PROJECT_DIR$/banana-tests/banana-tests.iml" />
-      <module fileurl="file://$PROJECT_DIR$/examples/examples.iml" filepath="$PROJECT_DIR$/examples/examples.iml" />
     </modules>
   </component>
 </project>
