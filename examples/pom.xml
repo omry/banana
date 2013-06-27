@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>net.yadan.banana</groupId>
-            <artifactId>banana-core</artifactId>
+            <artifactId>banana</artifactId>
         </dependency>
     </dependencies>
 </project>
