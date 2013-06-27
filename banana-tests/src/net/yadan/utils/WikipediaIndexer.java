@@ -283,10 +283,10 @@ public class WikipediaIndexer {
     public TopXWordsCollector(int topX) {
       if (topX > 0) {
         m_topX = topX;
-        m_bestWords = new PriorityQueue<>(topX);
+        m_bestWords = new PriorityQueue<WordAndCount>(topX);
       } else {
         m_topX = -topX;
-        m_bestWords = new PriorityQueue<>(-topX, new Comparator<WordAndCount>() {
+        m_bestWords = new PriorityQueue<WordAndCount>(-topX, new Comparator<WordAndCount>() {
 
           @Override
           public int compare(WordAndCount o1, WordAndCount o2) {

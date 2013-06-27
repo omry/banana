@@ -39,11 +39,11 @@ public class Benchmark {
     Object[][] data = new Object[][] {
 //        {100},
 //        {1000},
-//        {10000},
+        {10000},
 //        {100000},
 //        {1000000},
 //        {6500000},
-        {10000000},
+//        {10000000},
 //        {50000000},
 //        {100000000},
     };
@@ -96,7 +96,7 @@ public class Benchmark {
 
   @Test
   public void testJava() {
-    HashMap<String, Long> h = new HashMap<>(m_num, 1.0f);
+    HashMap<String, Long> h = new HashMap<String, Long>(m_num, 1.0f);
     for (int i = 0; i < m_num; i++) {
       h.put(String.valueOf(i), new Long(i));
     }

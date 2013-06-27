@@ -63,79 +63,6 @@ public class Util {
     }
   }
 
-  public static void write(String script, File file) throws IOException {
-    write(new String[] { script }, file);
-  }
-
-  private static byte[] buffer = new byte[10240];
-
-  public static void write(String script[], String file) throws IOException {
-    write(script, file, false);
-  }
-
-  public static void write(String script[], String file, boolean append) throws IOException {
-    write(script, new File(file), append);
-  }
-
-  public static void write(String script[], File file) throws IOException {
-    write(script, file, false);
-  }
-
-  public static synchronized void write(String script[], File file, boolean append)
-      throws IOException {
-    try (OutputStreamWriter fout = new OutputStreamWriter(new BuffedOutputStream2(
-        new FileOutputStream(file, append), buffer))) {
-      for (int i = 0; i < script.length; i++) {
-        String line = script[i];
-        fout.write(line);
-        fout.write("\n");
-      }
-    }
-  }
-
-  public static void write(List<String> script, File file) throws IOException {
-    write(script, file, false);
-  }
-
-  public static void write(List<String> script, File file, boolean append) throws IOException {
-    write(script.toArray(new String[script.size()]), file, append);
-  }
-
-  public static List<String> readLines(String file) throws IOException {
-    return readLines(new File(file));
-  }
-
-  public static List<String> readLines(String file, int rows) throws IOException {
-    return readLines(new File(file), rows);
-  }
-
-  public static List<String> readLines(File file) throws IOException {
-    return readLines(file, 0);
-  }
-
-  public static List<String> readLines(File file, int rows) throws IOException {
-    List<String> res = new ArrayList<String>();
-    if (!file.exists()) {
-      throw new FileNotFoundException(file.getAbsolutePath());
-    }
-
-    FileInputStream fin = new FileInputStream(file);
-    try {
-      try (BufferedReader in = new BufferedReader(new InputStreamReader(fin))) {
-        String line = null;
-        while ((line = in.readLine()) != null) {
-          if (rows == 0 || res.size() < rows) {
-            res.add(line);
-          }
-        }
-      }
-    } finally {
-      fin.close();
-    }
-
-    return res;
-  }
-
   public static String implode(Object set[]) {
     return implode(set, ",");
   }
@@ -318,20 +245,6 @@ public class Util {
       b.append((char) c);
     }
     return b.toString();
-  }
-
-  public static List<String> loadAllFiles(String dir, String file) throws IOException {
-    return loadAllFiles(new File(dir), file);
-  }
-
-  public static List<String> loadAllFiles(File dir, String file) throws IOException {
-    List<String> files = Util.find(dir, file, false);
-    List<String> res = new ArrayList<String>();
-    for (String f : files) {
-      res.addAll(Util.readLines(new File(dir, f)));
-    }
-
-    return res;
   }
 
   public static void cropImage(URL url, float x, float y, float w, float h, OutputStream out)
@@ -547,44 +460,42 @@ public class Util {
     return formatSize(size, false);
   }
 
-  public static String formatSize(long size, boolean shortFormat) {
-    StringBuffer sb = new StringBuffer();
-    try (Formatter f = new Formatter(sb)) {
-      double k = 1024;
-      double m = k * 1024;
-      double g = m * 1024;
-      long abs = Math.abs(size);
-      if (abs < k) {
-        f.format("%d", size);
-        if (shortFormat)
-          f.format("B");
-        else
-          f.format(" Bytes");
-      } else if (abs < m) {
-        f.format("%.1f", size / k);
-        if (shortFormat)
-          f.format("KB");
-        else
-          f.format(" KBytes");
-      } else if (abs < g) {
-        f.format("%.2f", size / m);
-        if (shortFormat)
-          f.format("MB");
-        else
-          f.format(" MBytes");
-      } else {
-        f.format("%.2f", size / g);
-        if (shortFormat)
-          f.format("GB");
-        else
-          f.format(" GBytes");
-      }
+    public static String formatSize(long size, boolean shortFormat) {
+        StringBuffer sb = new StringBuffer();
+        Formatter f = new Formatter(sb);
+        double k = 1024;
+        double m = k * 1024;
+        double g = m * 1024;
+        long abs = Math.abs(size);
+        if (abs < k) {
+            f.format("%d", size);
+            if (shortFormat)
+                f.format("B");
+            else
+                f.format(" Bytes");
+        } else if (abs < m) {
+            f.format("%.1f", size / k);
+            if (shortFormat)
+                f.format("KB");
+            else
+                f.format(" KBytes");
+        } else if (abs < g) {
+            f.format("%.2f", size / m);
+            if (shortFormat)
+                f.format("MB");
+            else
+                f.format(" MBytes");
+        } else {
+            f.format("%.2f", size / g);
+            if (shortFormat)
+                f.format("GB");
+            else
+                f.format(" GBytes");
+        }
+        return sb.toString();
     }
 
-    return sb.toString();
-  }
-
-  /**
+    /**
    * num [b|k|m|g], for example 1.2m
    *
    * @param s
@@ -621,26 +532,25 @@ public class Util {
     return k;
   }
 
-  public static String formatNum(double size) {
-    StringBuffer sb = new StringBuffer();
-    try (Formatter f = new Formatter(sb)) {
-      double k = 1000;
-      double m = k * 1000;
-      double g = m * 1000;
-      double abs = Math.abs(size);
-      if (abs < k) {
-        f.format("%.1f", size);
-      } else if (abs < m) {
-        f.format("%.1fK", (float) size / k);
-      } else if (abs < g) {
-        f.format("%.2fM", (float) size / m);
-      } else {
-        f.format("%.2fG", (float) size / g);
-      }
-    }
+    public static String formatNum(double size) {
+        StringBuffer sb = new StringBuffer();
+        Formatter f = new Formatter(sb);
+        double k = 1000;
+        double m = k * 1000;
+        double g = m * 1000;
+        double abs = Math.abs(size);
+        if (abs < k) {
+            f.format("%.1f", size);
+        } else if (abs < m) {
+            f.format("%.1fK", (float) size / k);
+        } else if (abs < g) {
+            f.format("%.2fM", (float) size / m);
+        } else {
+            f.format("%.2fG", (float) size / g);
+        }
 
-    return sb.toString();
-  }
+        return sb.toString();
+    }
 
   public static synchronized String formatDate(Date d) {
     if (s_df == null)

@@ -365,8 +365,9 @@ public abstract class AbstractReallocTest {
         }
       }
     } catch (AssertionError e) {
+      e.printStackTrace();
       throw new AssertionError(String.format("Error in %d -> %d", initialBlockCount,
-          reallocBlockCount), e);
+          reallocBlockCount));
     }
 
     assertEquals("Test leaks memory", 0, m.usedBlocks());
@@ -428,7 +429,8 @@ public abstract class AbstractReallocTest {
             m2.pointerDebugString(p2));
 
       } catch (AssertionError e) {
-        throw new AssertionError("Error, n=" + n, e);
+        e.printStackTrace();
+        throw new AssertionError("Error, n=" + n);
       } catch (OutOfMemoryException e) {
         // expected due to allocators overhead, just run till we find max
         // allocation size
@@ -508,7 +510,8 @@ public abstract class AbstractReallocTest {
         assertEquals(0, m2.usedBlocks());
 
       } catch (AssertionError e) {
-        throw new AssertionError("Error, n=" + n, e);
+        e.printStackTrace();
+        throw new AssertionError("Error, n=" + n);
       } catch (OutOfMemoryException e) {
         // expected due to allocators overhead, just run till we find max
         // allocation size

@@ -18,8 +18,8 @@
 
     <properties>
         <air.main.basedir>${project.parent.basedir}</air.main.basedir>
-        <source.version>1.7</source.version>
-        <target.version>1.7</target.version>
+        <source.version>1.6</source.version>
+        <target.version>1.6</target.version>
     </properties>
 
     <dependencies>

@@ -50,7 +50,7 @@ public class MapInsertRate {
 
     int max = keys.length;
     long start = System.currentTimeMillis();
-    java.util.HashMap<Long, Long> map = new java.util.HashMap<>(max, loadFactor);
+    java.util.HashMap<Long, Long> map = new java.util.HashMap<Long, Long>(max, loadFactor);
     System.out.println("java.util.HashMap init : " + (System.currentTimeMillis() - start));
 
     // SET
