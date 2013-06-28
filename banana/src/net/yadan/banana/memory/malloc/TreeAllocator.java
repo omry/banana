@@ -120,8 +120,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public int realloc(int pointer, int size) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (size < 0) {
       throw new IllegalArgumentException("malloc size must be non-negative");
     }
@@ -324,8 +324,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public void free(int pointer) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       int indexPointer = ~pointer;
       int nb = m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
@@ -344,8 +344,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public final void setInt(int pointer, int offset_in_data, int data) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       setIntDataForIndexedBlock(pointer, data, offset_in_data);
     } else {
@@ -371,8 +371,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public int getInt(int pointer, int offset_in_data) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       return getIntDataForIndexedBlock(pointer, offset_in_data);
     } else {
@@ -398,8 +398,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public void setInts(int pointer, int dst_offset_in_record, int src_data[], int src_pos, int length) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       int numBlocks = m_blocks.getInt(~pointer, INDEX_NUM_BLOCKS_OFFSET);
       int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
@@ -454,8 +454,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public void memSet(int pointer, int src_pos, int length, int value) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       int numBlocks = m_blocks.getInt(~pointer, INDEX_NUM_BLOCKS_OFFSET);
       int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
@@ -507,8 +507,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public void getInts(int pointer, int src_offset_in_record, int dst_data[], int dst_pos, int length) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       int numBlocks = m_blocks.getInt(~pointer, INDEX_NUM_BLOCKS_OFFSET);
       int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
@@ -568,8 +568,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public long getLong(int pointer, int offset_in_data) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       int ilower = getInt(pointer, offset_in_data + 1);
       int iupper = getInt(pointer, offset_in_data);
@@ -583,8 +583,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public void setLong(int pointer, int offset_in_data, long data) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     if (pointer < 0) {
       // upper int
       int int1 = (int) (data >>> 32);
@@ -752,8 +752,8 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public String pointerDebugString(int pointer) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     StringBuilder sb = new StringBuilder();
     if (pointer > 0) {
       sb.append("[");

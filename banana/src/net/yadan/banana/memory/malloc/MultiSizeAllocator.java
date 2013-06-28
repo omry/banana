@@ -126,8 +126,8 @@ public class MultiSizeAllocator implements IMemAllocator {
   }
 
   public int getSizeIndex(int pointer) {
-    assert pointer != 0;
-    assert pointer != -1;
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
     return pointer >>> m_allocationBits;
   }
 

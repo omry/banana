@@ -68,7 +68,7 @@
 
     <modules>
         <module>banana</module>
-        <module>banana-tests</module>
+        <module>misc</module>
         <module>examples</module>
     </modules>
 

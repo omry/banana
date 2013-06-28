@@ -4,13 +4,16 @@
  *
  * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
  */
-package net.yadan.utils;
+package net.yadan.banana.tools;
 
 import net.yadan.banana.TextIndex;
 import net.yadan.banana.map.IVarKeyHashMap;
 import net.yadan.banana.map.VarKeyHashMapVisitorAdapter;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
+import net.yadan.utils.Histogram;
+import net.yadan.utils.RateCounter;
+import net.yadan.utils.Util;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

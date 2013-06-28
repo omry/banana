@@ -8,7 +8,7 @@
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>banana-tests</artifactId>
+    <artifactId>banana-misc</artifactId>
     <packaging>jar</packaging>
 
     <build>
