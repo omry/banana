@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2013 omry <omry@yadan.net>
+ * All rights reserved.
+ *
+ * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
+ */
 package net.yadan.banana.memory.malloc;
 
 import net.yadan.banana.memory.*;
@@ -79,6 +85,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public int realloc(int pointer, int newSize) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (newSize < 0) {
       throw new IllegalArgumentException("malloc size must be non-negative");
     }
@@ -158,6 +166,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public void free(int pointer) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       int directPointer = ~pointer;
       int next;
@@ -174,6 +184,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public final void setInt(int pointer, int offset_in_data, int data) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       setIntDataMultiBlock(pointer, data, offset_in_data);
     } else {
@@ -196,6 +208,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public int getInt(int pointer, int offset_in_data) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       return getIntDataMultiBlock(pointer, offset_in_data);
     } else {
@@ -220,6 +234,8 @@ public class ChainedAllocator implements IMemAllocator {
   @Override
   public void setInts(int pointer, int dst_offset_in_record,
       int src_data[], int src_pos, int length) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
 
       int dataSizePerBlock = m_blockSize - DATA_OFFSET;
@@ -259,6 +275,8 @@ public class ChainedAllocator implements IMemAllocator {
   @Override
   public void getInts(int pointer, int src_offset_in_record,
       int dst_data[], int dst_pos, int length) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       int dataSize = m_blockSize - DATA_OFFSET;
       int current = ~pointer;
@@ -297,6 +315,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public void memSet(int pointer, int srcPos, int length, int value) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       int dataSize = m_blockSize - DATA_OFFSET;
       int current = ~pointer;
@@ -340,6 +360,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public long getLong(int pointer, int offset_in_data) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       int ilower = getInt(pointer, offset_in_data + 1);
       int iupper = getInt(pointer, offset_in_data);
@@ -353,6 +375,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public void setLong(int pointer, int offset_in_data, long data) {
+    assert pointer != 0;
+    assert pointer != -1;
     if (pointer < 0) {
       // upper int
       int int1 = (int) (data >>> 32);
@@ -459,6 +483,8 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public String pointerDebugString(int pointer) {
+    assert pointer != 0;
+    assert pointer != -1;
     StringBuilder sb = new StringBuilder();
     if (pointer < 0) {
       int directPointer = ~pointer;
@@ -496,6 +522,10 @@ public class ChainedAllocator implements IMemAllocator {
 
   @Override
   public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {
+    assert srcPtr != 0;
+    assert srcPtr != -1;
+    assert dstPtr != 0;
+    assert dstPtr != -1;
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }

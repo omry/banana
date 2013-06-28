@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2013 omry <omry@yadan.net>
+ * All rights reserved.
+ *
+ * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
+ */
 package net.yadan.banana.memory.malloc;
 
 import net.yadan.banana.memory.*;
@@ -120,6 +126,8 @@ public class MultiSizeAllocator implements IMemAllocator {
   }
 
   public int getSizeIndex(int pointer) {
+    assert pointer != 0;
+    assert pointer != -1;
     return pointer >>> m_allocationBits;
   }
 

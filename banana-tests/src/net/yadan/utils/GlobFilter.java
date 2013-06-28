@@ -1,6 +1,3 @@
-/**
- * 
- */
 package net.yadan.utils;
 
 import java.io.File;

@@ -270,4 +270,17 @@ public class VarKeyHashMapTest {
       key.reset();
     }
   }
+
+  @Test
+  public void testFindMissingVarKey() {
+    IBuffer key = new Buffer(10);
+    IBuffer key2 = new Buffer(20);
+    key.appendChars((PREFIX + 100).toCharArray());
+    key2.setUsed(15);
+    IVarKeyHashMap h = create(10, 0.75f);
+    assertFalse(h.containsKey(key));
+    h.createRecord(key, BLOCK_SIZE);
+    assertTrue(h.containsKey(key));
+    assertEquals(-1, h.findRecord(key2));
+  }
 }

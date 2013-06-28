@@ -1,6 +1,5 @@
 package net.yadan.banana.map;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
@@ -8,13 +7,6 @@ import net.yadan.banana.memory.initializers.NullInitializer;
 import net.yadan.banana.memory.malloc.MultiSizeAllocator;
 import net.yadan.banana.memory.malloc.TreeAllocator;
 import net.yadan.utils.StringUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
@@ -22,24 +14,20 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 
-@RunWith(value = Parameterized.class)
 public class Benchmark {
 
-  @Rule
-  public TestRule benchmarkRun = new BenchmarkRule();
   private int m_num;
 
   public Benchmark(int num) {
     m_num = num;
   }
 
-  @Parameters
   public static Collection<Object[]> data() {
     //@formatter:off
     Object[][] data = new Object[][] {
-//        {100},
+        {2},
 //        {1000},
-        {10000},
+//        {10000},
 //        {100000},
 //        {1000000},
 //        {6500000},
@@ -51,7 +39,6 @@ public class Benchmark {
   }
   //@formatter:on
 
-  @Test
   public void testBananaVarKeyHash() {
     NullInitializer nullInitializer = new NullInitializer();
     IMemAllocator values = new TreeAllocator(100, VarKeyHashMap.RESERVED_SIZE + 2, 1.2);
@@ -59,9 +46,10 @@ public class Benchmark {
     values.setInitializer(nullInitializer);
     keys.setInitializer(nullInitializer);
     IVarKeyHashMap h = new VarKeyHashMap(values, keys, m_num, 1.0);
+    h.setDebug(DebugLevel.DEBUG_STRUCTURE);
 
     IBuffer key = new Buffer(10);
-    for (int i = 0; i < m_num; i++) {
+    for (int i = 1; i < m_num; i++) {
       setAsString(key, i);
       int n = h.createRecord(key, 2);
       h.setLong(n, 0, i);
@@ -69,7 +57,8 @@ public class Benchmark {
     }
 
     for (int i = 0; i < m_num; i++) {
-      setAsString(key, i);
+//      setAsString(key, i);
+      key.appendChars((key + "_" + i).toCharArray());
       int n = h.findRecord(key);
       long v = h.getLong(n, 0);
       if (i != v)
@@ -94,7 +83,6 @@ public class Benchmark {
     key.appendChars(chars, 0, length);
   }
 
-  @Test
   public void testJava() {
     HashMap<String, Long> h = new HashMap<String, Long>(m_num, 1.0f);
     for (int i = 0; i < m_num; i++) {

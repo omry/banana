@@ -1,3 +1,9 @@
+/*
+ * Copyright (C) 2013 omry <omry@yadan.net>
+ * All rights reserved.
+ *
+ * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
+ */
 package net.yadan.banana.stack;
 
 import net.yadan.banana.memory.IBuffer;

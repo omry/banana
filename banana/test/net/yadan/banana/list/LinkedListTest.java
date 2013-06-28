@@ -204,7 +204,7 @@ public class LinkedListTest {
     IBuffer buffer = new Buffer(10);
     IBuffer outBuffer = new Buffer(10);
     buffer.appendChars(chars);
-    int node = list.insert(buffer, 0);
+    int node = list.insertHead(buffer);
     list.getBuffer(node, 0, outBuffer, buffer.size());
     assertEquals(buffer.size(), outBuffer.size());
     assertArrayEquals(buffer.array(), outBuffer.array());

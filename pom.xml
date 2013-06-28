@@ -54,6 +54,14 @@
                     <target>${target.version}</target>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>com.mycila.maven-license-plugin</groupId>
+                <artifactId>maven-license-plugin</artifactId>
+                <configuration>
+                    <header>LICENSE-HEADER</header>
+                </configuration>
+            </plugin>
         </plugins>
 
     </build>
