@@ -2,6 +2,7 @@ package net.yadan.banana.memory.malloc;
 
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.OutOfMemoryException;
+import net.yadan.banana.memory.initializers.MemSetInitializer;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -323,12 +324,31 @@ public abstract class AbstractMemAllocatorTest {
 
   @Test
   public void testMemCopyFull() {
-
   }
 
   @Test
   public void testMemCopyPartialFirstBlock() {
+  }
 
+  @Test
+  public void testInitialize() {
+    m.setInitializer(new MemSetInitializer(-1));
+    int size = 50;
+    int p = m.malloc(size);
+    try {
+      int expected[] = new int[size]; // initialized to zeros
+      m.memSet(p, 0, size, 0); // all zeros
+      int out[] = new int[size];
+      m.getInts(p, 0, out, 0, size);
+      assertArrayEquals(expected, out);
+      m.initialize(p);
+      m.getInts(p, 0, out, 0, size);
+      for (int i = 0; i < size; i++) {
+        assertEquals(-1, out[i]);
+      }
+    } finally {
+      m.free(p);
+    }
   }
 
 }

@@ -521,6 +521,25 @@ public class ChainedAllocator implements IMemAllocator {
   }
 
   @Override
+  public void initialize(int pointer) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      int directPointer = ~pointer;
+      int next;
+      do {
+        next = m_blocks.getInt(directPointer, NEXT_OFFSET);
+        m_blocks.initialize(directPointer);
+        m_blocks.setInt(directPointer, NEXT_OFFSET, next);
+        directPointer = next;
+      } while (next != -1);
+
+    } else {
+      m_blocks.initialize(pointer);
+    }
+  }
+
+  @Override
   public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {
     assert srcPtr != 0;
     assert srcPtr != -1;

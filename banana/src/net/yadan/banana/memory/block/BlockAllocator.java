@@ -24,7 +24,7 @@ import net.yadan.banana.memory.initializers.PrototypeInitializer;
  * - which can access up to 2B blocks, regardless of the block size.
  *
  * @author omry
- * @created 21/4/2013
+ * created 21/4/2013
  */
 public class BlockAllocator implements IBlockAllocator {
 
@@ -382,6 +382,11 @@ public class BlockAllocator implements IBlockAllocator {
   @Override
   public void setInitializer(MemInitializer initializer) {
     m_initializer = initializer;
+  }
+
+  @Override
+  public void initialize(int pointer) {
+    m_initializer.initialize(this, pointer, m_blockSize);
   }
 
   @Override

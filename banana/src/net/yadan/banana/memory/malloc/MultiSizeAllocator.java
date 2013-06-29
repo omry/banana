@@ -68,10 +68,10 @@ public class MultiSizeAllocator implements IMemAllocator {
     m_allocators[idx].free(pointer);
   }
 
-  public int maxSize(int pointer) {
-    int idx = getSizeIndex(pointer);
-    return m_allocators[idx].blockSize();
-  }
+//  public int maxSize(int pointer) {
+//    int idx = getSizeIndex(pointer);
+//    return m_allocators[idx].blockSize();
+//  }
 
   @Override
   public int getInt(int pointer, int offset_in_data) {
@@ -149,20 +149,20 @@ public class MultiSizeAllocator implements IMemAllocator {
 
   }
 
-  public void copyFrom(IPrimitiveAccess src, int src_pointer, int dst_pointer, int length) {
-    // can be more efficient if we use instanceof on src and do a direct copy
-    int buffer[] = new int[length];
-    src.getInts(src_pointer, 0, buffer, 0, length);
-    setInts(dst_pointer, 0, buffer, 0, length);
-  }
-
-  public int maxAllocation() {
-    return m_sizes[m_sizes.length - 1];
-  }
-
-  public final int[] getSizes() {
-    return m_sizes;
-  }
+//  public void copyFrom(IPrimitiveAccess src, int src_pointer, int dst_pointer, int length) {
+//    // can be more efficient if we use instanceof on src and do a direct copy
+//    int buffer[] = new int[length];
+//    src.getInts(src_pointer, 0, buffer, 0, length);
+//    setInts(dst_pointer, 0, buffer, 0, length);
+//  }
+//
+//  public int maxAllocation() {
+//    return m_sizes[m_sizes.length - 1];
+//  }
+//
+//  public final int[] getSizes() {
+//    return m_sizes;
+//  }
 
   @Override
   public int computeMemoryUsageFor(int size) {
@@ -282,6 +282,12 @@ public class MultiSizeAllocator implements IMemAllocator {
     return "Pointer from allocator " + idx + " " + sb.toString();
   }
 
+  @Override
+  public void initialize(int pointer) {
+    int idx = getSizeIndex(pointer);
+    pointer = extractPointer(pointer);
+    m_allocators[idx].initialize(pointer);
+  }
 
   @Override
   public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {

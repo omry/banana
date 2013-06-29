@@ -712,7 +712,7 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public int maximumCapacityFor(int pointer) {
-    // TODO: can we just retuyrn numBlocks here instead of doing all this crap?
+    // TODO: can we just return numBlocks here instead of doing all this crap?
     int capacity = 0;
     if (pointer < 0) {
       int indexPointer = ~pointer;
@@ -801,6 +801,24 @@ public class TreeAllocator implements IMemAllocator {
     return sb.toString();
   }
 
+  @Override
+  public void initialize(int pointer) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      int indexPointer = ~pointer;
+      int nb = m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
+      int memSize = nb * m_blockSize;
+      int maxCapacityFor = maximumCapacityForNumBlocks(nb) / m_indexBlockCapacity;
+      int numBlocks = 1 + ((memSize - 1) / maxCapacityFor); // ceil(a/b)
+      for (int i = 0; i < numBlocks; i++) {
+        int p = m_blocks.getInt(indexPointer, i + INDEX_DATA_OFFSET);
+        initialize(p);
+      }
+    } else {
+      m_blocks.initialize(pointer);
+    }
+  }
 
   @Override
   public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {

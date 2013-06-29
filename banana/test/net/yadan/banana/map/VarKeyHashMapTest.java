@@ -89,6 +89,7 @@ public class VarKeyHashMapTest {
 
     IMemAllocator keys = h.keysMemory();
     IMemAllocator values = h.valueMemory();
+    values.setInitializer(new MemSetInitializer(0));
     assertEquals(0, keys.usedBlocks());
     assertEquals(0, values.usedBlocks());
 
@@ -101,7 +102,7 @@ public class VarKeyHashMapTest {
 
     h.setInt(pointer1, 0, 19);
     int pointer2 = h.createRecord(key, BLOCK_SIZE);
-    assertEquals(19, h.getInt(pointer2, 0));
+    assertEquals(0, h.getInt(pointer2, 0));
     assertEquals(1, keys.usedBlocks());
     assertEquals(1, values.usedBlocks());
 
@@ -282,5 +283,16 @@ public class VarKeyHashMapTest {
     h.createRecord(key, BLOCK_SIZE);
     assertTrue(h.containsKey(key));
     assertEquals(-1, h.findRecord(key2));
+  }
+
+  @Test
+  public void testCreateSameRecordDifferentSize() {
+    IVarKeyHashMap h = create(10, 0.8);
+    IBuffer key = new Buffer(10);
+    key.appendInts(new int[]{1,2,3});
+    h.createRecord(key, BLOCK_SIZE);
+    int size = BLOCK_SIZE * 2;
+    int r = h.createRecord(key, size);
+    h.setInts(r, 0, new int[size], 0, size);
   }
 }

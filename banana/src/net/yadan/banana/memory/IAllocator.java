@@ -10,7 +10,7 @@ package net.yadan.banana.memory;
  * Methods common to all allocators.
  *
  * @author omry
- * @created May 6, 2013
+ * created May 6, 2013
  */
 public interface IAllocator {
 
@@ -106,4 +106,9 @@ public interface IAllocator {
    */
   public double getGrowthFactor();
 
+  /**
+   * Initializes the pointer with the current initializer
+   * @param pointer
+   */
+  void initialize(int pointer);
 }

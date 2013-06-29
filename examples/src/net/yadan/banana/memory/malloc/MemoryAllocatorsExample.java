@@ -57,8 +57,7 @@ public class MemoryAllocatorsExample {
       allocator.setInt(pointer2, offset, data);
     }
 
-    // Prints the debug representation of the pointer, which is in fact a linked
-    // list
+    // Prints the debug representation of the pointer
     System.out.println(name + " : Second allocation, pointer can support "
         + allocator.maximumCapacityFor(pointer2) + " ints");
     System.out.println(name + " : " + allocator.pointerDebugString(pointer2));

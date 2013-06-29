@@ -16,7 +16,7 @@ import net.yadan.banana.memory.malloc.ChainedAllocator;
 
 /**
  * @author omry
- * @created May 7, 2013
+ * created May 7, 2013
  */
 public class HashMap implements IHashMap {
 
@@ -104,16 +104,28 @@ public class HashMap implements IHashMap {
     int pointer = m_table[listNum];
 
     // find if this key is already in the chain
+    int prev = -1;
     while (pointer != -1) {
-      // list already contain this key, use it
+      // list already contain this key, reuse the space - resizing as needed
       if (m_memory.getLong(pointer, KEY_OFFSET) == key) {
+        int pNext = m_memory.getInt(pointer, NEXT_OFFSET);
+        pointer = m_memory.realloc(pointer, size + RESERVED_SIZE);
+        if (prev == -1) {
+          m_table[listNum] = pointer;
+        } else {
+          m_memory.setInt(prev, NEXT_OFFSET, pointer);
+        }
+        m_memory.initialize(pointer);
+        m_memory.setLong(pointer, KEY_OFFSET, key);
+        m_memory.setInt(pointer, NEXT_OFFSET, pNext);
         break;
       }
+      prev = pointer;
       pointer = m_memory.getInt(pointer, NEXT_OFFSET);
     }
 
     if (pointer == -1) {
-      pointer = m_memory.malloc(size);
+      pointer = m_memory.malloc(size + RESERVED_SIZE);
       m_memory.setLong(pointer, KEY_OFFSET, key);
       m_memory.setInt(pointer, NEXT_OFFSET, m_table[listNum]);
       m_table[listNum] = pointer;

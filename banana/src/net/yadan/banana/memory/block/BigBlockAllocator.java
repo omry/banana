@@ -15,7 +15,7 @@ import net.yadan.banana.memory.initializers.PrototypeInitializer;
 
 /**
  * @author omry
- * @created 20/5/2013
+ * created 20/5/2013
  */
 public class BigBlockAllocator implements IBlockAllocator {
 
@@ -240,6 +240,8 @@ public class BigBlockAllocator implements IBlockAllocator {
 
   @Override
   public void free(int pointer) {
+    assert pointer != 0 : "pointer 0 should not be freed";
+    assert pointer != -1 : "pointer -1 should not be freed";
     set_next(pointer, m_head);
     m_head = pointer;
     m_free++;
@@ -259,12 +261,14 @@ public class BigBlockAllocator implements IBlockAllocator {
   @Override
   public void setInt(int pointer, int offset_in_data, int data) {
     assert pointer >= 0 : "Negative pointer : " + pointer;
+    int buffer[] = m_buffer[pointer / m_maxBlocksPerArray];
+    pointer = pointer % m_maxBlocksPerArray;
+
     assert offset_in_data >= 0 : "Negative offset_in_data " + offset_in_data;
     assert offset_in_data < m_blockSize : String.format("offset_in_data >= m_blockSize : %d >= %d",
         offset_in_data, m_blockSize);
-    int array_num = pointer / m_maxBlocksPerArray;
-    int array_pointer = pointer % m_maxBlocksPerArray;
-    m_buffer[array_num][array_pointer * m_blockSize + offset_in_data] = data;
+
+    buffer[pointer * m_blockSize + offset_in_data] = data;
   }
 
   @Override
@@ -272,21 +276,20 @@ public class BigBlockAllocator implements IBlockAllocator {
       int src_data[], int src_pos, int length) {
 
     assert pointer >= 0 : "Negative pointer : " + pointer;
-    int array_num = pointer / m_maxBlocksPerArray;
-    int buffer[] = m_buffer[array_num];
-    int array_pointer = pointer % m_maxBlocksPerArray;
+    int buffer[] = m_buffer[pointer / m_maxBlocksPerArray];
+    pointer = pointer % m_maxBlocksPerArray;
 
     assert src_pos >= 0 : "Negative src_pos";
     assert src_pos + length <= src_data.length : String.format(
         "src_pos + length > src_data.length : %d + %d > %d", src_pos, length, src_data.length);
-    assert array_pointer * m_blockSize + src_pos + length <= buffer.length : String.format(
-        "pointer + src_pos + length > m_buffer.length  : %d + %d + %d >= %d", array_pointer,
+    assert pointer * m_blockSize + src_pos + length <= buffer.length : String.format(
+        "pointer + src_pos + length > m_buffer.length  : %d + %d + %d >= %d", pointer,
         src_pos, length, buffer.length);
     assert dst_offset_in_record + length <= m_blockSize : String.format(
         "dst_offset_in_record + length > m_blockSize   : %d + %d >= %d", dst_offset_in_record,
         length, m_blockSize);
 
-    System.arraycopy(src_data, src_pos, buffer, array_pointer * m_blockSize + dst_offset_in_record,
+    System.arraycopy(src_data, src_pos, buffer, pointer * m_blockSize + dst_offset_in_record,
         length);
   }
 
@@ -464,6 +467,11 @@ public class BigBlockAllocator implements IBlockAllocator {
   @Override
   public void setInitializer(MemInitializer initializer) {
     m_initializer = initializer;
+  }
+
+  @Override
+  public void initialize(int pointer) {
+    m_initializer.initialize(this, pointer, m_blockSize);
   }
 
   @Override

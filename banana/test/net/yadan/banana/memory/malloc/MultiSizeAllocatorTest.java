@@ -1,23 +1,23 @@
 package net.yadan.banana.memory.malloc;
 
+import net.yadan.banana.memory.initializers.MemSetInitializer;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 public class MultiSizeAllocatorTest {
 
   @Test
   public void testGetReservedBits() {
-    assertEquals(1, new MultiSizeAllocator(10, new int[] { 10, 20 }, 2.0).getReservedBits());
-    assertEquals(2, new MultiSizeAllocator(10, new int[] { 1, 2, 3 }, 2.0).getReservedBits());
-    assertEquals(2, new MultiSizeAllocator(10, new int[] { 1, 2, 3, 4 }, 2.0).getReservedBits());
-    assertEquals(3, new MultiSizeAllocator(10, new int[] { 1, 2, 3, 4, 5 }, 2.0).getReservedBits());
+    assertEquals(1, new MultiSizeAllocator(10, new int[]{10, 20}, 2.0).getReservedBits());
+    assertEquals(2, new MultiSizeAllocator(10, new int[]{1, 2, 3}, 2.0).getReservedBits());
+    assertEquals(2, new MultiSizeAllocator(10, new int[]{1, 2, 3, 4}, 2.0).getReservedBits());
+    assertEquals(3, new MultiSizeAllocator(10, new int[]{1, 2, 3, 4, 5}, 2.0).getReservedBits());
   }
 
   @Test
   public void testFindAllocator() {
-    MultiSizeAllocator m = new MultiSizeAllocator(10, new int[] { 10, 20 }, 2.0);
+    MultiSizeAllocator m = new MultiSizeAllocator(10, new int[]{10, 20}, 2.0);
 
     assertEquals(0, m.findAllocatorFor(1));
     assertEquals(0, m.findAllocatorFor(10));
@@ -55,7 +55,7 @@ public class MultiSizeAllocatorTest {
 
   @Test
   public void testAllocations() {
-    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[] { 32, 64, 128 }, 2.0);
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[]{32, 64, 128}, 2.0);
     int p1 = a.malloc(10);
     int p2 = a.malloc(40);
     a.setInt(p1, 0, 1);
@@ -71,5 +71,27 @@ public class MultiSizeAllocatorTest {
     assertEquals(2, a.getInt(p2, 0));
     assertEquals(3, a.getInt(p3, 0));
     assertEquals(4, a.getInt(p4, 0));
+  }
+
+  @Test
+  public void testInitialize() {
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[]{32, 64, 128}, 2.0);
+    a.setInitializer(new MemSetInitializer(-1));
+    int size = 50;
+    int p = a.malloc(size);
+    try {
+      int expected[] = new int[size]; // initialized to zeros
+      a.memSet(p, 0, size, 0); // all zeros
+      int out[] = new int[size];
+      a.getInts(p, 0, out, 0, size);
+      assertArrayEquals(expected, out);
+      a.initialize(p);
+      a.getInts(p, 0, out, 0, size);
+      for (int i = 0; i < size; i++) {
+        assertEquals(-1, out[i]);
+      }
+    } finally {
+      a.free(p);
+    }
   }
 }

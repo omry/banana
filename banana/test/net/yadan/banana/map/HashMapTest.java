@@ -13,7 +13,7 @@ public class HashMapTest {
   private static final int BLOCK_SIZE = 10;
 
   protected IHashMap create(int initialCapacity, double loadFactor) {
-    IMemAllocator allocator = new ChainedAllocator(100, BLOCK_SIZE, 2.0);
+    IMemAllocator allocator = new ChainedAllocator(100, HashMap.RESERVED_SIZE + BLOCK_SIZE, 2.0);
     allocator.setDebug(true);
     allocator.setInitializer(new MemSetInitializer(-1));
     HashMap map = new HashMap(allocator, initialCapacity, loadFactor);
@@ -63,7 +63,9 @@ public class HashMapTest {
   @Test
   public void testPutRecordWithSameKey() {
     IHashMap h = create(10, 0.75f);
+    h.setDebug(DebugLevel.DEBUG_STRUCTURE);
     IMemAllocator mem = h.getAllocator();
+    mem.setInitializer(new MemSetInitializer(0));
     assertEquals(0, mem.usedBlocks());
     int pointer1 = h.createRecord(1000, BLOCK_SIZE);
     assertEquals(pointer1, h.findRecord(1000));
@@ -71,7 +73,7 @@ public class HashMapTest {
 
     h.setInt(pointer1, 0, 19);
     int pointer2 = h.createRecord(1000, BLOCK_SIZE);
-    assertEquals(19, h.getInt(pointer2, 0));
+    assertEquals(0, h.getInt(pointer2, 0));
 
     h.setInt(pointer2, 0, 29);
     assertEquals(pointer2, h.findRecord(1000));
@@ -177,5 +179,14 @@ public class HashMapTest {
       h.setInt(r, 10, i);
 //      System.out.println(h.getAllocator().pointerDebugString(r));
     }
+  }
+
+  @Test
+  public void testCreateSameRecordDifferentSize() {
+    IHashMap h = create(10, 0.8);
+    h.createRecord(1000, BLOCK_SIZE);
+    int size = BLOCK_SIZE * 2;
+    int r = h.createRecord(1000, size);
+    h.setInts(r, 0, new int[size], 0, size);
   }
 }

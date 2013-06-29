@@ -17,7 +17,7 @@ import net.yadan.banana.memory.malloc.MultiSizeAllocator;
 
 /**
  * @author omry
- * @created May 7, 2013
+ * created May 7, 2013
  */
 public class VarKeyHashMap implements IVarKeyHashMap {
 
@@ -105,14 +105,26 @@ public class VarKeyHashMap implements IVarKeyHashMap {
     int pointer = m_table[listNum];
 
     // find if this key is already in the chain
+    int prev = -1;
     while (pointer != -1) {
       int keyPtr2 = m_valuesMemory.getInt(pointer, KEY_OFFSET);
       int keySize2 = m_keysMemory.getInt(keyPtr2, KEY_SIZE_OFFSET);
 
-      // list already contain this key, replace it
+      // list already contain this key, reuse the space - resizing as needed
       if (key.equals(m_keysMemory, keyPtr2, KEY_DATA_OFFSET, keySize2)) {
+        int pNext = m_valuesMemory.getInt(pointer, NEXT_OFFSET);
+        pointer = m_valuesMemory.realloc(pointer, size);
+        if (prev == -1) {
+          m_table[listNum] = pointer;
+        } else {
+          m_valuesMemory.setInt(prev, NEXT_OFFSET, pointer);
+        }
+        m_valuesMemory.initialize(pointer);
+        m_valuesMemory.setInt(pointer, KEY_OFFSET, keyPtr2);
+        m_valuesMemory.setInt(pointer, NEXT_OFFSET, pNext);
         break;
       }
+      prev = pointer;
       pointer = m_valuesMemory.getInt(pointer, NEXT_OFFSET);
     }
 
