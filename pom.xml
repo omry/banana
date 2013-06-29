@@ -16,6 +16,7 @@
     <name>${project.artifactId}</name>
     <description>A primitive collection library with it's own memory management</description>
     <inceptionYear>2013</inceptionYear>
+    <url>https://github.com/omry/banana</url>
 
     <scm>
         <connection>https://github.com/omry/banana.git</connection>
@@ -23,7 +24,25 @@
         <url>https://github.com/omry/banana</url>
     </scm>
 
-    <developers/>
+    <licenses>
+        <license>
+            <name>BSD 3-Clause</name>
+            <url>https://raw.github.com/omry/banana/master/BSD-LICENSE</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>omry</id>
+            <name>Omry Yadan</name>
+            <email>omry@yadan.nry</email>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
+
     <organization/>
     <distributionManagement/>
 
