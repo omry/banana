@@ -712,18 +712,10 @@ public class TreeAllocator implements IMemAllocator {
 
   @Override
   public int maximumCapacityFor(int pointer) {
-    // TODO: can we just return numBlocks here instead of doing all this crap?
     int capacity = 0;
     if (pointer < 0) {
       int indexPointer = ~pointer;
-      int nb = m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
-      int memSize = nb * m_blockSize;
-      int maxCapacityFor = maximumCapacityForNumBlocks(nb) / m_indexBlockCapacity;
-      int numBlocks = 1 + ((memSize - 1) / maxCapacityFor); // ceil(a/b)
-      for (int i = 0; i < numBlocks; i++) {
-        int p = m_blocks.getInt(indexPointer, i + INDEX_DATA_OFFSET);
-        capacity += maximumCapacityFor(p);
-      }
+      return m_blockSize * m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
     } else {
       capacity = m_blocks.blockSize();
     }
