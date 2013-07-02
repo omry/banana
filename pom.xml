@@ -19,8 +19,8 @@
     <url>https://github.com/omry/banana</url>
 
     <scm>
-        <connection>https://github.com/omry/banana.git</connection>
-        <developerConnection>git@github.com:omry/banana.git</developerConnection>
+        <connection>scm:git:git@github.com:omry/banana.git</connection>
+        <developerConnection>scm:git:git@github.com:omry/banana.git</developerConnection>
         <url>https://github.com/omry/banana</url>
     </scm>
 
@@ -81,16 +81,44 @@
                     <header>LICENSE-HEADER</header>
                 </configuration>
             </plugin>
-        </plugins>
 
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.4.1</version>
+            </plugin>
+        </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>oss-release</id>
+            <properties>
+                <!-- tests run in the preparation step of the release -->
+                <skipTests>true</skipTests>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- oss requires a javadoc jar. Build one when releasing. -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                    <!-- Sign artifacts using gpg for oss upload -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <modules>
         <module>banana</module>
         <module>misc</module>
         <module>examples</module>
     </modules>
-
 
     <dependencyManagement>
         <dependencies>
