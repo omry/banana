@@ -297,8 +297,9 @@ public class MultiSizeAllocator implements IMemAllocator {
 
   @Override
   public void memSet(int pointer, int srcPos, int length, int value) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
+    int idx = getSizeIndex(pointer);
+    pointer = extractPointer(pointer);
+    m_allocators[idx].memSet(pointer, srcPos, length, value);
   }
 
 
