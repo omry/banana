@@ -13,6 +13,7 @@ import net.yadan.banana.memory.OutOfMemoryException;
 import net.yadan.banana.memory.block.BlockAllocator;
 import net.yadan.banana.memory.malloc.ChainedAllocator;
 import net.yadan.banana.memory.malloc.MultiSizeAllocator;
+import net.yadan.banana.memory.malloc.TreeAllocator;
 
 
 /**
@@ -52,8 +53,8 @@ public class VarKeyHashMap implements IVarKeyHashMap {
   private IMemAllocator m_valuesMemory;
   private IMemAllocator m_keysMemory;
 
-  public VarKeyHashMap(int maxBlocks, int blockSize, int growthFactor, double loadFactor) {
-    this(new ChainedAllocator(maxBlocks, blockSize + USER_DATA_OFFSET, growthFactor),
+  public VarKeyHashMap(int maxBlocks, int blockSize, double growthFactor, double loadFactor) {
+    this(new TreeAllocator(maxBlocks, blockSize + USER_DATA_OFFSET, growthFactor),
         new MultiSizeAllocator(100, new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 25, 50, 100 }, 2.0),
         maxBlocks, loadFactor);
   }
