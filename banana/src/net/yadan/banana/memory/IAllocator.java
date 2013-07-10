@@ -12,7 +12,7 @@ package net.yadan.banana.memory;
  * @author omry
  * created May 6, 2013
  */
-public interface IAllocator {
+public interface IAllocator extends IPrimitiveAccess {
 
   /**
    * Returns the specified pointer back into the allocator pool. The pointer

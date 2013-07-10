@@ -39,16 +39,16 @@ public class MapInsertRate {
     Util.shuffleArray(keys);
     System.out.println("Done");
 
-//    bananaRateString2Long(keys, 1f);
+//    bananaRateString2Long(keys, 1f, false);
 
 //    System.gc();
 //    Thread.sleep(5000);
 
-//    fastUtilRateString2Long(keys, 1f);
+    fastUtilRateString2Long(keys, 1f);
 
 
-//
-    bananaRate(keys, lf);
+
+//    bananaRate(keys, lf);
 //
 //    System.gc();
 //    Thread.sleep(5000);
@@ -372,21 +372,12 @@ public class MapInsertRate {
   }
 
 
-  public static int bananaRateString2Long(int keys[], float lf) {
+  public static int bananaRateString2Long(int keys[], float lf, boolean warmup) {
+    if (warmup) {
+      System.out.println("Banana VarKeyHashMap warmup round");
+    }
     int max = keys.length;
     long start = System.currentTimeMillis();
-    int mapCap = (int) Math.ceil(max * (1 / lf));
-    IBlockAllocator blocks;
-    if ((long) mapCap * (HashMap.RESERVED_SIZE + 2) > Integer.MAX_VALUE) {
-      System.out.println("Using BigBlockAllocator");
-      blocks = new BigBlockAllocator(mapCap, HashMap.RESERVED_SIZE + 2, 0);
-    } else {
-      System.out.println("Using BlockAllocator");
-      blocks = new BlockAllocator(mapCap, HashMap.RESERVED_SIZE + 2, 0);
-    }
-
-
-
     NullInitializer nullInitializer = new NullInitializer();
     IMemAllocator values = new TreeAllocator(100, VarKeyHashMap.RESERVED_SIZE + 2, 1.2);
     IMemAllocator keysMem = new MultiSizeAllocator(100, new int[] { 2, 3, 5, 6 }, 1.2);
@@ -394,7 +385,8 @@ public class MapInsertRate {
     keysMem.setInitializer(nullInitializer);
     IVarKeyHashMap map = new VarKeyHashMap(values, keysMem, max, 1.0);
 
-    System.out.println("Banana VarKeyHashMap init : " + (System.currentTimeMillis() - start));
+    if (!warmup)
+      System.out.println("Banana VarKeyHashMap init : " + (System.currentTimeMillis() - start));
 
     // SET
     int PRINT_BLOCK = max / 10;
@@ -406,8 +398,9 @@ public class MapInsertRate {
         if (last_print != -1) {
           long e = System.currentTimeMillis() - last_print;
           double rate = PRINT_BLOCK / (e / 1000f);
-          System.out.println(String.format("Banana VarKeyHashMap: Inserted %s items in %d ms, rate %s/sec ",
-              Util.formatNum(i), e, Util.formatNum(rate)));
+          if (!warmup)
+            System.out.println(String.format("Banana VarKeyHashMap: Inserted %s items in %d ms, rate %s/sec ",
+                Util.formatNum(i), e, Util.formatNum(rate)));
         }
         last_print = System.currentTimeMillis();
       }
@@ -419,8 +412,9 @@ public class MapInsertRate {
     }
 
     long elapsed = System.currentTimeMillis() - start;
-    System.out.printf("Banana VarKeyHashMap: Insert time %d, Avg rate %s / sec\n", elapsed,
-        Util.formatNum((long) (max / (elapsed / 1000f))));
+    if (!warmup)
+      System.out.printf("Banana VarKeyHashMap: Insert time %d, Avg rate %s / sec\n", elapsed,
+          Util.formatNum((long) (max / (elapsed / 1000f))));
 
     // GET
     last_print = -1;
@@ -430,8 +424,9 @@ public class MapInsertRate {
         if (last_print != -1) {
           long e = System.currentTimeMillis() - last_print;
           double rate = PRINT_BLOCK / (e / 1000f);
-          System.out.println(String.format("Banana VarKeyHashMap: Got %s items in %d ms, rate %s/sec ",
-              Util.formatNum(i), e, Util.formatNum(rate)));
+          if (!warmup)
+            System.out.println(String.format("Banana VarKeyHashMap: Got %s items in %d ms, rate %s/sec ",
+                Util.formatNum(i), e, Util.formatNum(rate)));
         }
         last_print = System.currentTimeMillis();
       }
@@ -444,13 +439,21 @@ public class MapInsertRate {
     }
 
     elapsed = System.currentTimeMillis() - start;
-    System.out.printf("Banana VarKeyHashMap: Get time %d, Avg rate %s / sec\n", elapsed,
-        Util.formatNum((long) (max / (elapsed / 1000f))));
+    if (!warmup)
+      System.out.printf("Banana VarKeyHashMap: Get time %d, Avg rate %s / sec\n", elapsed,
+          Util.formatNum((long) (max / (elapsed / 1000f))));
 
     System.gc();
-    System.out.println("Banana VarKeyHashMap: used memory "
-        + Util.formatSize((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())));
-    System.out.println("Banana VarKeyHashMap: reported memory usage " + Util.formatSize(map.computeMemoryUsage()));
+    if (!warmup) {
+
+      System.out.println("Banana VarKeyHashMap: used memory "
+          + Util.formatSize((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory())));
+      System.out.println("Banana VarKeyHashMap: reported memory usage " + Util.formatSize(map.computeMemoryUsage()));
+    } else {
+      System.out.println("Banana VarKeyHashMap warm-up round done");
+    }
+
+
 
     return map.size();
   }

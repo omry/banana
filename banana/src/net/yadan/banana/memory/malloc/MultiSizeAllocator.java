@@ -28,6 +28,10 @@ public class MultiSizeAllocator implements IMemAllocator {
   private int m_allocationBits;
   private int m_maxAllocationPointer;
 
+  public MultiSizeAllocator(int numInitialBlocks, int sizes[]) {
+    this(numInitialBlocks, sizes, 0);
+  }
+
   public MultiSizeAllocator(int numInitialBlocks, int sizes[], double growthFactor) {
     m_sizes = sizes;
     // if you don't have two sizes just use IntAllocator

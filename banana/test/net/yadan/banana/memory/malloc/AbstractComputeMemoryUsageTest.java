@@ -36,6 +36,7 @@ public abstract class AbstractComputeMemoryUsageTest {
   //@formatter:on
 
   public AbstractComputeMemoryUsageTest(int maxBlocks, int blockSize, int allocationSize) {
+    m_blockSize = blockSize;
     m_allocationSize = allocationSize;
     init(maxBlocks, blockSize);
     m.setDebug(true);
@@ -45,12 +46,13 @@ public abstract class AbstractComputeMemoryUsageTest {
   public abstract void init(int maxBlocks, int blockSize);
 
   public IMemAllocator m;
+  private int m_blockSize;
   public int m_allocationSize;
 
   @Test
   public void testComputeMemoryUsageFor() {
     int p = m.malloc(m_allocationSize);
-    int usedBytes = m.usedBlocks() * m.blockSize() * 4;
+    int usedBytes = m.usedBlocks() * m_blockSize * 4;
     int computedUsage = m.computeMemoryUsageFor(m_allocationSize);
     assertEquals(usedBytes, computedUsage);
     m.free(p);
@@ -70,9 +72,10 @@ public abstract class AbstractComputeMemoryUsageTest {
   public void testUsedMemoryInLoop() {
     try {
       for (int i = 0; i < m.maxBlocks(); i++) {
-        int allocationSize = i * m.blockSize();
+        int allocationSize = i * m_blockSize;
         int p = m.malloc(allocationSize);
-        int computedUsedBlocks = m.computeMemoryUsageFor(allocationSize) / (m.blockSize() * 4);
+        int memoryUsage = m.computeMemoryUsageFor(allocationSize);
+        int computedUsedBlocks = memoryUsage / (m_blockSize * 4);
         assertEquals("Allocation size " + allocationSize, m.usedBlocks(), computedUsedBlocks);
         m.free(p);
       }

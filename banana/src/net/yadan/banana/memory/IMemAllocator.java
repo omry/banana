@@ -12,7 +12,7 @@ package net.yadan.banana.memory;
  * @author omry
  * @created May 22, 2013
  */
-public interface IMemAllocator extends IAllocator, IPrimitiveAccess {
+public interface IMemAllocator extends IAllocator {
 
   /**
    * returns a pointer to a memory buffer large enough to hold size ints.
