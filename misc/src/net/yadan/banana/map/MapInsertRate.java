@@ -29,7 +29,7 @@ public class MapInsertRate {
 
     float lf = 0.96f;
     int max = 1 * 1000 * 1000 * 1000; // 1b
-    max = 100 * 1000 * 1000;
+    max = 400 * 1000 * 1000;
     System.out.print("Initializing " + Util.formatNum(max) + " keys sequence...");
     int keys[] = new int[max];
     for (int i = 0; i < max; i++) {
@@ -44,12 +44,12 @@ public class MapInsertRate {
 //    System.gc();
 //    Thread.sleep(5000);
 
-    fastUtilRateString2Long(keys, 1f);
+//    fastUtilRateString2Long(keys, 1f);
 
 
 
-//    bananaRate(keys, lf);
-//
+    bananaRate(keys, lf);
+
 //    System.gc();
 //    Thread.sleep(5000);
 //
@@ -317,7 +317,7 @@ public class MapInsertRate {
   public static int fastUtilRateString2Long(int keys[], float loadFactor) {
     int max = keys.length;
     long start = System.currentTimeMillis();
-    Object2LongOpenHashMap map = new Object2LongOpenHashMap(max, loadFactor);
+    Object2LongOpenHashMap<String> map = new Object2LongOpenHashMap<String>(max, loadFactor);
     System.out.println("FastUtil Object2LongOpenHashMapinit : " + (System.currentTimeMillis() - start));
 
     // SET

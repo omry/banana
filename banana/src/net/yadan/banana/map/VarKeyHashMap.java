@@ -11,7 +11,6 @@ import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.OutOfMemoryException;
 import net.yadan.banana.memory.block.BlockAllocator;
-import net.yadan.banana.memory.malloc.ChainedAllocator;
 import net.yadan.banana.memory.malloc.MultiSizeAllocator;
 import net.yadan.banana.memory.malloc.TreeAllocator;
 
