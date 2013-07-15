@@ -1,10 +1,12 @@
 package net.yadan.banana.list;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 public class LinkedListTest {
@@ -234,5 +236,19 @@ public class LinkedListTest {
     list.getBuffer(node, 0, outBuffer, buffer.size());
     assertEquals(buffer.size(), outBuffer.size());
     assertArrayEquals(buffer.array(), outBuffer.array());
+  }
+
+  @Test
+  public void testClear() {
+    ILinkedList list = createList(5, 1, 0);
+    assertEquals(0, list.size());
+    int n1 = list.appendTail(1);
+    assertEquals(1, list.size());
+    list.insert(1, n1);
+    assertEquals(2, list.size());
+
+    list.clear();
+    assertEquals(0, list.size());
+    assertEquals(0, list.getAllocator().usedBlocks());
   }
 }

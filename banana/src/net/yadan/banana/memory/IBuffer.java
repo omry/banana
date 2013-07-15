@@ -55,6 +55,8 @@ public interface IBuffer {
 
   public void setChars(int dst_offset, char src_data[], int src_pos, int length);
 
+  public void setChars(int dst_offset, char src_data[]);
+
   public void getChars(int src_offset, char dst_data[], int dst_pos, int length);
 
   public void appendInt(int v);

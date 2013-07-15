@@ -1,10 +1,10 @@
 package net.yadan.banana;
 
-import net.yadan.banana.map.DebugLevel;
 import net.yadan.banana.map.IVarKeyHashMap;
 import net.yadan.banana.map.VarKeyHashMapVisitor;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

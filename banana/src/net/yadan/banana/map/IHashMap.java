@@ -6,15 +6,15 @@
  */
 package net.yadan.banana.map;
 
+import net.yadan.banana.DebugLevel;
+import net.yadan.banana.ICollection;
 import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.IPrimitiveAccess;
 
-public interface IHashMap extends IPrimitiveAccess {
+public interface IHashMap extends ICollection, IPrimitiveAccess {
 
-  /**
-   * @return true if empty
-   */
+  @Override
   public boolean isEmpty();
 
   public int createRecord(long key, int size);
@@ -37,13 +37,12 @@ public interface IHashMap extends IPrimitiveAccess {
 
   public boolean remove(long key);
 
+  @Override
   public void clear();
 
   public int getCapacity();
 
-  /**
-   * @return number of records used in this hash-map
-   */
+  @Override
   public int size();
 
   public double getLoadFactor();
@@ -54,9 +53,7 @@ public interface IHashMap extends IPrimitiveAccess {
    */
   public void setGrowthFactor(double d);
 
-  /**
-   * Returns an estimation of the number of bytes this HashMap is using
-   */
+  @Override
   public long computeMemoryUsage();
 
   /**
@@ -67,6 +64,7 @@ public interface IHashMap extends IPrimitiveAccess {
    */
   public void visitRecords(HashMapVisitor visitor);
 
+  @Override
   public void setDebug(DebugLevel level);
 
   public IMemAllocator getAllocator();

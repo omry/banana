@@ -4,7 +4,7 @@
  *
  * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
  */
-package net.yadan.banana.map;
+package net.yadan.banana;
 
 public enum DebugLevel  {
   NONE,

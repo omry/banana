@@ -8,7 +8,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
   StackTest.class,
-  MultiStackTest.class,
 })
 //@formatter:on
 public class AllTests {

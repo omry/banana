@@ -1,16 +1,17 @@
 package net.yadan.banana.memory.block;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import junit.framework.TestSuite;
 import net.yadan.banana.memory.IBlockAllocator;
 import net.yadan.banana.memory.MemInitializer;
 import net.yadan.banana.memory.OutOfMemoryException;
 import net.yadan.banana.memory.initializers.MemSetInitializer;
 import net.yadan.banana.memory.initializers.PrototypeInitializer;
+
 import org.junit.After;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
-
 
 public abstract class AbstractBlockAllocatorTest extends TestSuite {
 
@@ -20,8 +21,7 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
     return create(numBlocks, blockSize, 0, new MemSetInitializer(-1));
   }
 
-  public abstract IBlockAllocator create(int numBlocks, int blockSize, double growthFactor,
-      MemInitializer initializer);
+  public abstract IBlockAllocator create(int numBlocks, int blockSize, double growthFactor, MemInitializer initializer);
 
   @After
   public void postTest() {
@@ -98,6 +98,32 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   }
 
   @Test
+  public void testUpperShort() {
+    a = create(3, 1);
+    int p = a.malloc();
+    a.setInt(p, 0, 0);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.setUpperShort(p, 0, 99);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(99, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testLowerShort() {
+    a = create(3, 1);
+    int p = a.malloc();
+    a.setInt(p, 0, 0);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.setLowerShort(p, 0, 99);
+    assertEquals(99, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
   public void testLong() {
     a = create(10, 5);
     int p = a.malloc();
@@ -108,7 +134,7 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
 
   @Test
   public void testInitializer() {
-    int[] prototype = new int[]{1, 2, 3};
+    int[] prototype = new int[] { 1, 2, 3 };
     a = create(5, 3, 0, new PrototypeInitializer(prototype));
 
     for (int i = 0; i < 5; i++) {
@@ -155,7 +181,7 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   public void testMemCopy_fullblock() {
     a = create(2, 5, 0, null);
 
-    int[] data = new int[]{1, 2, 3, 4, 5};
+    int[] data = new int[] { 1, 2, 3, 4, 5 };
     int[] out = new int[5];
 
     int p1 = a.malloc();
@@ -176,8 +202,8 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   public void testMemCopy_same_offset() {
     a = create(2, 5, 0, null);
 
-    int[] data = new int[]{1, 2, 3, 4, 5};
-    int[] expected = new int[]{0, 2, 3, 4, 5};
+    int[] data = new int[] { 1, 2, 3, 4, 5 };
+    int[] expected = new int[] { 0, 2, 3, 4, 5 };
     int[] out = new int[5];
 
     int p1 = a.malloc();
@@ -198,8 +224,8 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   public void testMemCopy_diff_offset() {
     a = create(2, 5, 0, null);
 
-    int[] data = new int[]{1, 2, 3, 4, 5};
-    int[] expected = new int[]{0, 1, 2, 3, 4};
+    int[] data = new int[] { 1, 2, 3, 4, 5 };
+    int[] expected = new int[] { 0, 1, 2, 3, 4 };
     int[] out = new int[5];
 
     int p1 = a.malloc();
@@ -220,8 +246,8 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   public void testMemSet_fullblock() {
     a = create(2, 5, 0, null);
 
-    int[] data = new int[]{1, 2, 3, 4, 5};
-    int[] expected = new int[]{9, 9, 9, 9, 9};
+    int[] data = new int[] { 1, 2, 3, 4, 5 };
+    int[] expected = new int[] { 9, 9, 9, 9, 9 };
     int[] out = new int[5];
     int p1 = a.malloc();
     a.setInts(p1, 0, data, 0, a.blockSize());
@@ -238,8 +264,8 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   public void testMemSet_partialBlock() {
     a = create(2, 5, 0, null);
 
-    int[] data = new int[]{1, 2, 3, 4, 5};
-    int[] expected = new int[]{1, 9, 9, 9, 5};
+    int[] data = new int[] { 1, 2, 3, 4, 5 };
+    int[] expected = new int[] { 1, 9, 9, 9, 5 };
     int[] out = new int[5];
     int p1 = a.malloc();
     a.setInts(p1, 0, data, 0, a.blockSize());
@@ -254,14 +280,14 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
 
   @Test
   public void testInitialize() {
-    int[] prototype = new int[]{1, 2, 3};
+    int[] prototype = new int[] { 1, 2, 3 };
     a = create(5, 3, 0, new PrototypeInitializer(prototype));
     int p = a.malloc();
     try {
       a.memSet(p, 0, 3, 0);
       int out[] = new int[3];
       a.getInts(p, 0, out, 0, 3);
-      assertArrayEquals(new int[]{0, 0, 0}, out);
+      assertArrayEquals(new int[] { 0, 0, 0 }, out);
       a.initialize(p);
       a.getInts(p, 0, out, 0, 3);
       assertArrayEquals(prototype, out);
@@ -269,5 +295,4 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
       a.free(p);
     }
   }
-
 }

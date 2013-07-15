@@ -1,9 +1,11 @@
 package net.yadan.banana.memory.malloc;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import net.yadan.banana.memory.initializers.MemSetInitializer;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class MultiSizeAllocatorTest {
 
@@ -71,6 +73,31 @@ public class MultiSizeAllocatorTest {
     assertEquals(2, a.getInt(p2, 0));
     assertEquals(3, a.getInt(p3, 0));
     assertEquals(4, a.getInt(p4, 0));
+  }
+
+  @Test
+  public void testUpperShort() {
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[] { 32, 64, 128 }, 2.0);
+    int p = a.malloc(10);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.setUpperShort(p, 0, 99);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(99, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testLowerShort() {
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[] { 32, 64, 128 }, 2.0);
+    int p = a.malloc(10);
+    a.setInt(p, 0, 0);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.setLowerShort(p, 0, 99);
+    assertEquals(99, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.free(p);
   }
 
   @Test

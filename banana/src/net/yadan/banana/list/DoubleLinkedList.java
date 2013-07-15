@@ -6,6 +6,8 @@
  */
 package net.yadan.banana.list;
 
+import net.yadan.banana.DebugLevel;
+import net.yadan.banana.Formatter;
 import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.block.BlockAllocator;
@@ -28,6 +30,8 @@ public class DoubleLinkedList implements ILinkedList {
   private int m_tail;
   private int m_size;
   private IMemAllocator m_memory;
+  private DebugLevel m_debugLevel;
+  private Formatter m_linkFormatter;
 
   public DoubleLinkedList(int maxBlocks, int blockSize, double growthFactor) {
     init(new ChainedAllocator(maxBlocks, blockSize + RESERVED_SIZE, growthFactor));
@@ -172,6 +176,26 @@ public class DoubleLinkedList implements ILinkedList {
   }
 
   @Override
+  public short getUpperShort(int link, int offset) {
+    return m_memory.getUpperShort(link, offset + DATA_OFFSET);
+  }
+
+  @Override
+  public short getLowerShort(int link, int offset) {
+    return m_memory.getLowerShort(link, offset + DATA_OFFSET);
+  }
+
+  @Override
+  public void setUpperShort(int link, int offset, int s) {
+    m_memory.setUpperShort(link, offset + DATA_OFFSET, s);
+  }
+
+  @Override
+  public void setLowerShort(int link, int offset, int s) {
+    m_memory.setLowerShort(link, offset + DATA_OFFSET, s);
+  }
+
+  @Override
   public void setInt(int link, int offset_in_data, int data) {
     m_memory.setInt(link, DATA_OFFSET + offset_in_data, data);
   }
@@ -211,9 +235,19 @@ public class DoubleLinkedList implements ILinkedList {
     return m_memory.getInt(pointer, PREV_OFFSET);
   }
 
+  @Override
   public void clear() {
+    int n = m_head;
+    while (n != -1) {
+      int next = m_memory.getInt(n, NEXT_OFFSET);
+      m_memory.free(n);
+      n = next;
+    }
+
     m_head = m_tail = -1;
+    m_size = 0;
   }
+
 
   @Override
   public IMemAllocator getAllocator() {
@@ -250,4 +284,45 @@ public class DoubleLinkedList implements ILinkedList {
     setInts(ret, 0, data.array(), 0, data.size());
     return ret;
   }
+
+  @Override
+  public boolean isEmpty() {
+    return m_size == 0;
+  }
+
+  @Override
+  public long computeMemoryUsage() {
+    return m_memory.computeMemoryUsage();
+  }
+
+  @Override
+  public void setDebug(DebugLevel level) {
+    m_debugLevel = level;
+  }
+
+  @Override
+  public DebugLevel getDebug() {
+    return m_debugLevel;
+  }
+
+  @Override
+  public String toString() {
+    return ListUtil.listToString(this);
+  }
+
+  @Override
+  public void setFormatter(Formatter formatter) {
+    m_linkFormatter = formatter;
+  }
+
+  @Override
+  public Formatter getFormatter() {
+    return m_linkFormatter;
+  }
+
+  @Override
+  public int maximumCapacityFor(int link) {
+    return m_memory.maximumCapacityFor(link) - RESERVED_SIZE;
+  }
+
 }

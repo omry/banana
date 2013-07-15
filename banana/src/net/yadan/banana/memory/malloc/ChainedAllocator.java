@@ -6,7 +6,12 @@
  */
 package net.yadan.banana.memory.malloc;
 
-import net.yadan.banana.memory.*;
+import net.yadan.banana.memory.IBlockAllocator;
+import net.yadan.banana.memory.IBuffer;
+import net.yadan.banana.memory.IMemAllocator;
+import net.yadan.banana.memory.MemInitializer;
+import net.yadan.banana.memory.OutOfBoundsAccess;
+import net.yadan.banana.memory.OutOfMemoryException;
 import net.yadan.banana.memory.block.BlockAllocator;
 
 
@@ -547,5 +552,67 @@ public class ChainedAllocator implements IMemAllocator {
     assert dstPtr != -1;
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public short getUpperShort(int pointer, int offset) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    return m_blocks.getUpperShort(pointer, offset);
+  }
+
+  @Override
+  public short getLowerShort(int pointer, int offset) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    return m_blocks.getLowerShort(pointer, offset);
+  }
+
+  @Override
+  public void setUpperShort(int pointer, int offset, int s) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    m_blocks.setUpperShort(pointer, offset, s);
+  }
+
+  @Override
+  public void setLowerShort(int pointer, int offset, int s) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    m_blocks.setLowerShort(pointer, offset, s);
+  }
+
+  // this is super ugly, but since nothing here is thread safe anyway it's okay.
+  int retOffset;
+  protected int getDataBlockPointerFor(int pointer, int offset) {
+    assert pointer < 0;
+
+    int dataSize = m_blockSize - DATA_OFFSET;
+    int current = ~pointer;
+    while (offset >= dataSize) {
+      current = m_blocks.getInt(current, NEXT_OFFSET);
+      if (current == -1) {
+        throw new OutOfBoundsAccess("Accessing pointer beyond allocation size");
+      }
+      offset -= dataSize;
+    }
+    retOffset = DATA_OFFSET + offset;
+    return current;
   }
 }

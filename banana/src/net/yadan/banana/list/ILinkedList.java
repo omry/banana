@@ -6,11 +6,12 @@
  */
 package net.yadan.banana.list;
 
+import net.yadan.banana.ICollection;
 import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.IPrimitiveAccess;
 
-public interface ILinkedList extends IPrimitiveAccess {
+public interface ILinkedList extends  ICollection, IPrimitiveAccess {
 
   /**
    * Inserts a new head for the list
@@ -81,6 +82,7 @@ public interface ILinkedList extends IPrimitiveAccess {
   /**
    * @return the number of records in the linked list
    */
+  @Override
   public int size();
 
   /**

@@ -6,11 +6,15 @@
  */
 package net.yadan.banana.memory.malloc;
 
-import net.yadan.banana.memory.*;
-import net.yadan.banana.memory.block.BlockAllocator;
-
 import java.util.LinkedList;
 import java.util.Queue;
+
+import net.yadan.banana.memory.IBlockAllocator;
+import net.yadan.banana.memory.IBuffer;
+import net.yadan.banana.memory.IMemAllocator;
+import net.yadan.banana.memory.MemInitializer;
+import net.yadan.banana.memory.OutOfMemoryException;
+import net.yadan.banana.memory.block.BlockAllocator;
 
 
 //TODO: simplify
@@ -340,6 +344,42 @@ public class TreeAllocator implements IMemAllocator {
     } else {
       m_blocks.free(pointer);
     }
+  }
+
+  @Override
+  public short getUpperShort(int pointer, int offset) {
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    return m_blocks.getUpperShort(pointer, offset);
+  }
+
+  @Override
+  public short getLowerShort(int pointer, int offset) {
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    return m_blocks.getLowerShort(pointer, offset);
+  }
+
+  @Override
+  public void setUpperShort(int pointer, int offset, int s) {
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    m_blocks.setUpperShort(pointer, offset, s);
+  }
+
+  @Override
+  public void setLowerShort(int pointer, int offset, int s) {
+    if (pointer < 0) {
+      pointer = getDataBlockPointerFor(pointer, offset);
+      offset = retOffset;
+    }
+    m_blocks.setLowerShort(pointer, offset, s);
   }
 
   @Override
@@ -821,5 +861,28 @@ public class TreeAllocator implements IMemAllocator {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException();
   }
+
+  // this is super ugly, but since nothing here is thread safe anyway it's okay.
+  int retOffset;
+  // TODO: can this be iterative? can we eliminate the call to
+  // maximumCapacityForNumBlocks?
+  protected int getDataBlockPointerFor(int pointer, int offset) {
+    assert pointer < 0;
+    int indexPointer = ~pointer;
+
+    int numBlocks = m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
+    int maxCapacityPerIndexPtr = maximumCapacityForNumBlocks(numBlocks) / m_indexBlockCapacity;
+    int blockNum = offset / maxCapacityPerIndexPtr;
+    int dataPtr = m_blocks.getInt(indexPointer, INDEX_DATA_OFFSET + blockNum);
+    if (maxCapacityPerIndexPtr <= m_blockSize || dataPtr >= 0) {
+      int new_offset_in_data = offset - blockNum * maxCapacityPerIndexPtr;
+      retOffset = new_offset_in_data;
+      return dataPtr;
+    } else {
+      int new_offset_in_data = offset - blockNum * maxCapacityPerIndexPtr;
+      return getDataBlockPointerFor(dataPtr, new_offset_in_data);
+    }
+  }
+
 
 }

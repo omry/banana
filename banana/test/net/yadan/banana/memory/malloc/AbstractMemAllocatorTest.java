@@ -1,18 +1,21 @@
 package net.yadan.banana.memory.malloc;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.OutOfMemoryException;
 import net.yadan.banana.memory.initializers.MemSetInitializer;
+
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.util.Arrays;
-import java.util.Collection;
-
-import static org.junit.Assert.*;
 
 @RunWith(value = Parameterized.class)
 public abstract class AbstractMemAllocatorTest {
@@ -49,6 +52,50 @@ public abstract class AbstractMemAllocatorTest {
       assertEquals("Test leaks memory", 0, m.usedBlocks());
     }
     m = null;
+  }
+
+  @Test
+  public void testUpperShort() {
+    int p = m.malloc(m_allocationSize);
+    int offset = 0;
+    m.setInt(p, offset, 0);
+    assertEquals(0, m.getLowerShort(p, offset));
+    assertEquals(0, m.getUpperShort(p, offset));
+    m.setUpperShort(p, offset, 99);
+    assertEquals(0, m.getLowerShort(p, offset));
+    assertEquals(99, m.getUpperShort(p, offset));
+
+    offset = m_allocationSize / 2;
+    m.setInt(p, offset, 0);
+    assertEquals(0, m.getLowerShort(p, offset));
+    assertEquals(0, m.getUpperShort(p, offset));
+    m.setUpperShort(p, offset, 99);
+    assertEquals(0, m.getLowerShort(p, offset));
+    assertEquals(99, m.getUpperShort(p, offset));
+
+    m.free(p);
+  }
+
+  @Test
+  public void testLowerShort() {
+    int p = m.malloc(m_allocationSize);
+    int offset = 0;
+    m.setInt(p, offset, 0);
+    assertEquals(0, m.getLowerShort(p, offset));
+    assertEquals(0, m.getUpperShort(p, offset));
+    m.setLowerShort(p, offset, 99);
+    assertEquals(99, m.getLowerShort(p, offset));
+    assertEquals(0, m.getUpperShort(p, offset));
+
+    offset = m_allocationSize / 2;
+    m.setInt(p, offset, 0);
+    assertEquals(0, m.getLowerShort(p, offset));
+    assertEquals(0, m.getUpperShort(p, offset));
+    m.setLowerShort(p, offset, 99);
+    assertEquals(99, m.getLowerShort(p, offset));
+    assertEquals(0, m.getUpperShort(p, offset));
+
+    m.free(p);
   }
 
   @Test
@@ -321,7 +368,6 @@ public abstract class AbstractMemAllocatorTest {
     }
   }
 
-
   @Test
   public void testMemCopyFull() {
   }
@@ -350,5 +396,4 @@ public abstract class AbstractMemAllocatorTest {
       m.free(p);
     }
   }
-
 }

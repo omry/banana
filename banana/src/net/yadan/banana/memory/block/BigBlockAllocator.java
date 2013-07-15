@@ -248,6 +248,55 @@ public class BigBlockAllocator implements IBlockAllocator {
   }
 
   @Override
+  public short getUpperShort(int pointer, int offset) {
+    assert pointer >= 0 : "Negative pointer : " + pointer;
+    assert offset >= 0 : "Negative offset_in_data " + offset;
+    assert offset < m_blockSize : String.format("offset >= m_blockSize : %d >= %d", offset, m_blockSize);
+
+    int array_num = pointer / m_maxBlocksPerArray;
+    int array_pointer = pointer % m_maxBlocksPerArray;
+    return (short) (m_buffer[array_num][array_pointer * m_blockSize + offset] >>> 16);
+
+  }
+
+  @Override
+  public short getLowerShort(int pointer, int offset) {
+    assert pointer >= 0 : "Negative pointer : " + pointer;
+    assert offset >= 0 : "Negative offset_in_data " + offset;
+    assert offset < m_blockSize : String.format("offset >= m_blockSize : %d >= %d", offset, m_blockSize);
+
+    int array_num = pointer / m_maxBlocksPerArray;
+    int array_pointer = pointer % m_maxBlocksPerArray;
+    return (short) (m_buffer[array_num][array_pointer * m_blockSize + offset]);
+  }
+
+  @Override
+  public void setUpperShort(int pointer, int offset, int s) {
+    assert pointer >= 0 : "Negative pointer : " + pointer;
+    assert offset >= 0 : "Negative offset " + offset;
+    assert offset < m_blockSize : String.format("offset >= m_blockSize : %d >= %d", offset, m_blockSize);
+
+    int array_num = pointer / m_maxBlocksPerArray;
+    int array_pointer = pointer % m_maxBlocksPerArray;
+    int off = array_pointer * m_blockSize + offset;
+    short lower = (short) m_buffer[array_num][off];
+    m_buffer[array_num][off] = (s << 16) | lower;
+  }
+
+  @Override
+  public void setLowerShort(int pointer, int offset, int s) {
+    assert pointer >= 0 : "Negative pointer : " + pointer;
+    assert offset >= 0 : "Negative offset " + offset;
+    assert offset < m_blockSize : String.format("offset >= m_blockSize : %d >= %d", offset, m_blockSize);
+
+    int array_num = pointer / m_maxBlocksPerArray;
+    int array_pointer = pointer % m_maxBlocksPerArray;
+    int off = array_pointer * m_blockSize + offset;
+    short upper = (short) (m_buffer[array_num][off] >>> 16);
+    m_buffer[array_num][off] = upper << 16 | s;
+  }
+
+  @Override
   public int getInt(int pointer, int offset_in_data) {
     assert pointer >= 0 : "Negative pointer : " + pointer;
     assert offset_in_data >= 0 : "Negative offset_in_data " + offset_in_data;
@@ -481,5 +530,10 @@ public class BigBlockAllocator implements IBlockAllocator {
       mem += arr.length;
     }
     return mem * 4;
+  }
+
+  @Override
+  public int maximumCapacityFor(int pointer) {
+    return m_blockSize;
   }
 }

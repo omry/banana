@@ -6,7 +6,6 @@
  */
 package net.yadan.banana;
 
-import net.yadan.banana.map.DebugLevel;
 import net.yadan.banana.map.IVarKeyHashMap;
 import net.yadan.banana.map.VarKeyHashMap;
 import net.yadan.banana.memory.Buffer;

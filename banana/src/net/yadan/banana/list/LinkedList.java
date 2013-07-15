@@ -6,11 +6,13 @@
  */
 package net.yadan.banana.list;
 
+import net.yadan.banana.DebugLevel;
+import net.yadan.banana.DefaultFormatter;
+import net.yadan.banana.Formatter;
 import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
-import net.yadan.banana.memory.malloc.ChainedAllocator;
 import net.yadan.banana.memory.malloc.MultiSizeAllocator;
-
+import net.yadan.banana.memory.malloc.TreeAllocator;
 
 /**
  * @author omry
@@ -27,14 +29,16 @@ public class LinkedList implements ILinkedList {
   private int m_head;
   private int m_tail;
   private int m_size;
+  private DebugLevel m_debugLevel;
+  private Formatter m_linkFormatter;
 
   public LinkedList(int maxBlocks, int blockSize, double growthFactor) {
-    init(new ChainedAllocator(maxBlocks, blockSize + RESERVED_SIZE, growthFactor));
+    init(new TreeAllocator(maxBlocks, blockSize + RESERVED_SIZE, growthFactor));
   }
 
   public LinkedList(int maxBlocks, int sizes[], double growthFactor) {
     int sizes1[] = new int[sizes.length];
-    for(int i=0;i<sizes.length;i++){
+    for (int i = 0; i < sizes.length; i++) {
       sizes1[i] = sizes[i] + RESERVED_SIZE;
     }
     init(new MultiSizeAllocator(maxBlocks, sizes1, growthFactor));
@@ -49,6 +53,7 @@ public class LinkedList implements ILinkedList {
     m_head = -1;
     m_tail = -1;
     m_size = 0;
+    m_linkFormatter = new DefaultFormatter();
   }
 
   @Override
@@ -113,7 +118,7 @@ public class LinkedList implements ILinkedList {
     return link;
   }
 
-@Override
+  @Override
   public void remove(int link) {
     if (link == m_head) {
       m_head = m_memory.getInt(link, NEXT_OFFSET);
@@ -157,6 +162,26 @@ public class LinkedList implements ILinkedList {
   @Override
   public int getInt(int link, int offset_in_data) {
     return m_memory.getInt(link, offset_in_data + DATA_OFFSET);
+  }
+
+  @Override
+  public short getUpperShort(int link, int offset) {
+    return m_memory.getUpperShort(link, offset + DATA_OFFSET);
+  }
+
+  @Override
+  public short getLowerShort(int link, int offset) {
+    return m_memory.getLowerShort(link, offset + DATA_OFFSET);
+  }
+
+  @Override
+  public void setUpperShort(int link, int offset, int s) {
+    m_memory.setUpperShort(link, offset + DATA_OFFSET, s);
+  }
+
+  @Override
+  public void setLowerShort(int link, int offset, int s) {
+    m_memory.setLowerShort(link, offset + DATA_OFFSET, s);
   }
 
   @Override
@@ -204,7 +229,6 @@ public class LinkedList implements ILinkedList {
     return m_size;
   }
 
-
   @Override
   public int insertHead(IBuffer data) {
     int ret = insertHead(data.size());
@@ -224,5 +248,58 @@ public class LinkedList implements ILinkedList {
     int ret = appendTail(data.size());
     setInts(ret, 0, data.array(), 0, data.size());
     return ret;
+  }
+
+  @Override
+  public boolean isEmpty() {
+    return size() == 0;
+  }
+
+  @Override
+  public void clear() {
+    int n = m_head;
+    while (n != -1) {
+      int next = m_memory.getInt(n, NEXT_OFFSET);
+      m_memory.free(n);
+      n = next;
+    }
+
+    m_head = m_tail = -1;
+    m_size = 0;
+  }
+
+  @Override
+  public long computeMemoryUsage() {
+    return m_memory.computeMemoryUsage();
+  }
+
+  @Override
+  public void setDebug(DebugLevel level) {
+    m_debugLevel = level;
+  }
+
+  @Override
+  public DebugLevel getDebug() {
+    return m_debugLevel;
+  }
+
+  @Override
+  public String toString() {
+    return ListUtil.listToString(this);
+  }
+
+  @Override
+  public int maximumCapacityFor(int link) {
+    return m_memory.maximumCapacityFor(link) - RESERVED_SIZE;
+  }
+
+  @Override
+  public void setFormatter(Formatter formatter) {
+    m_linkFormatter = formatter;
+  }
+
+  @Override
+  public Formatter getFormatter() {
+    return m_linkFormatter;
   }
 }

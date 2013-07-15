@@ -6,10 +6,13 @@
  */
 package net.yadan.banana.memory.malloc;
 
-import net.yadan.banana.memory.*;
-import net.yadan.banana.memory.block.BlockAllocator;
-
 import java.util.Arrays;
+
+import net.yadan.banana.memory.IBlockAllocator;
+import net.yadan.banana.memory.IBuffer;
+import net.yadan.banana.memory.IMemAllocator;
+import net.yadan.banana.memory.MemInitializer;
+import net.yadan.banana.memory.block.BlockAllocator;
 
 
 /**
@@ -71,11 +74,6 @@ public class MultiSizeAllocator implements IMemAllocator {
     pointer = extractPointer(pointer);
     m_allocators[idx].free(pointer);
   }
-
-//  public int maxSize(int pointer) {
-//    int idx = getSizeIndex(pointer);
-//    return m_allocators[idx].blockSize();
-//  }
 
   @Override
   public int getInt(int pointer, int offset_in_data) {
@@ -152,21 +150,6 @@ public class MultiSizeAllocator implements IMemAllocator {
     return i;
 
   }
-
-//  public void copyFrom(IPrimitiveAccess src, int src_pointer, int dst_pointer, int length) {
-//    // can be more efficient if we use instanceof on src and do a direct copy
-//    int buffer[] = new int[length];
-//    src.getInts(src_pointer, 0, buffer, 0, length);
-//    setInts(dst_pointer, 0, buffer, 0, length);
-//  }
-//
-//  public int maxAllocation() {
-//    return m_sizes[m_sizes.length - 1];
-//  }
-//
-//  public final int[] getSizes() {
-//    return m_sizes;
-//  }
 
   @Override
   public int computeMemoryUsageFor(int size) {
@@ -306,5 +289,31 @@ public class MultiSizeAllocator implements IMemAllocator {
     m_allocators[idx].memSet(pointer, srcPos, length, value);
   }
 
+  @Override
+  public short getUpperShort(int pointer, int offset) {
+    int idx = getSizeIndex(pointer);
+    pointer = extractPointer(pointer);
+    return m_allocators[idx].getUpperShort(pointer, offset);
+  }
 
+  @Override
+  public short getLowerShort(int pointer, int offset) {
+    int idx = getSizeIndex(pointer);
+    pointer = extractPointer(pointer);
+    return m_allocators[idx].getLowerShort(pointer, offset);
+  }
+
+  @Override
+  public void setUpperShort(int pointer, int offset, int s) {
+    int idx = getSizeIndex(pointer);
+    pointer = extractPointer(pointer);
+    m_allocators[idx].setUpperShort(pointer, offset, s);
+  }
+
+  @Override
+  public void setLowerShort(int pointer, int offset, int s) {
+    int idx = getSizeIndex(pointer);
+    pointer = extractPointer(pointer);
+    m_allocators[idx].setLowerShort(pointer, offset, s);
+  }
 }

@@ -6,6 +6,9 @@
  */
 package net.yadan.banana.map;
 
+import net.yadan.banana.DebugLevel;
+import net.yadan.banana.DefaultFormatter;
+import net.yadan.banana.Formatter;
 import net.yadan.banana.memory.IBlockAllocator;
 import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
@@ -47,6 +50,8 @@ public class HashMap implements IHashMap {
 
   private DebugLevel m_debugLevel = DebugLevel.NONE;
 
+  private Formatter m_formatter;
+
   public HashMap(int maxBlocks, int blockSize, double growthFactor, double loadFactor) {
     IBlockAllocator blocks;
     if ((long)maxBlocks * (HashMap.RESERVED_SIZE + blockSize) > Integer.MAX_VALUE) {
@@ -66,6 +71,7 @@ public class HashMap implements IHashMap {
     m_loadFactor = loadFactor;
     m_growthFactor = DEFAULT_GROWTH_FACTOR;
     m_memory = memory;
+    m_formatter = new DefaultFormatter();
     m_table = new int[initialCapacity];
     m_threshold = (int) Math.min(getCapacity() * getLoadFactor(), Integer.MAX_VALUE);
     m_size = 0;
@@ -180,6 +186,26 @@ public class HashMap implements IHashMap {
   }
 
   @Override
+  public short getUpperShort(int link, int offset) {
+    return m_memory.getUpperShort(link, offset + USER_DATA_OFFSET);
+  }
+
+  @Override
+  public short getLowerShort(int link, int offset) {
+    return m_memory.getLowerShort(link, offset + USER_DATA_OFFSET);
+  }
+
+  @Override
+  public void setUpperShort(int link, int offset, int s) {
+    m_memory.setUpperShort(link, offset + USER_DATA_OFFSET, s);
+  }
+
+  @Override
+  public void setLowerShort(int link, int offset, int s) {
+    m_memory.setLowerShort(link, offset + USER_DATA_OFFSET, s);
+  }
+
+  @Override
   public void setLong(int record_id, int offset_in_data, long data) {
     m_memory.setLong(record_id, offset_in_data + USER_DATA_OFFSET, data);
   }
@@ -282,7 +308,7 @@ public class HashMap implements IHashMap {
       while (n != -1) {
         long key = m_memory.getLong(n, KEY_OFFSET);
         int next = m_memory.getInt(n, NEXT_OFFSET);
-        visitor.visit(this, key, n, num, total);
+        visitor.visit(this, key, n, num++, total);
         n = next;
       }
     }
@@ -348,30 +374,18 @@ public class HashMap implements IHashMap {
 
         @Override
         public void visit(IHashMap map, long key, int valuePtr, long num, long total) {
-          s.append("(");
-          s.append(key);
-          s.append(")=(");
-          int maxValueSize = m_memory.maximumCapacityFor(valuePtr);
-          for (int i = 0; i < maxValueSize; i++) {
-            s.append(m_memory.getInt(valuePtr, i));
-            if (i + 1 < maxValueSize) {
-              s.append(",");
-            }
-          }
-          s.append(")");
+          s.append(key).append("=").append(m_formatter.format(map, valuePtr));
           if (num + 1 < total) {
-            s.append(",\n");
+            s.append("\n");
           }
         }
 
         @Override
         public void end(IHashMap map) {
-          s.append("]");
         }
 
         @Override
         public void begin(IHashMap map) {
-          s.append("[");
         }
       });
     } else if (m_debugLevel == DebugLevel.DEBUG_STRUCTURE) {
@@ -384,16 +398,8 @@ public class HashMap implements IHashMap {
 
           s.append("(#").append(n).append(",K=");
           s.append(key);
-          s.append(",N=").append(m_memory.getInt(n, NEXT_OFFSET));
-          s.append(")=(");
-          int maxValueSize = m_memory.maximumCapacityFor(n);
-          for (int i = USER_DATA_OFFSET; i < maxValueSize; i++) {
-            s.append(m_memory.getInt(n, i));
-            if (i + 1 < maxValueSize) {
-              s.append(",");
-            }
-          }
-          s.append(")");
+          s.append(",N=").append(next);
+          s.append(")=").append(m_formatter.format(this, n));
 
           n = next;
           s.append(" -> ");
@@ -412,7 +418,29 @@ public class HashMap implements IHashMap {
   }
 
   @Override
+  public DebugLevel getDebug() {
+    return m_debugLevel;
+  }
+
+  @Override
   public IMemAllocator getAllocator() {
     return m_memory;
   }
+
+  @Override
+  public int maximumCapacityFor(int link) {
+    return m_memory.maximumCapacityFor(link) - RESERVED_SIZE;
+  }
+
+  @Override
+  public void setFormatter(Formatter formatter) {
+    m_formatter = formatter;
+  }
+
+
+  @Override
+  public Formatter getFormatter() {
+    return m_formatter;
+  }
+
 }

@@ -36,12 +36,6 @@ public interface IMemAllocator extends IAllocator {
    */
   public int computeMemoryUsageFor(int size);
 
-  /**
-   * Returns the maximum ints capacity for the specified pointer. depending on
-   * the allocator this may be larger than requested size
-   */
-  public int maximumCapacityFor(int pointer);
-
   public IBlockAllocator getBlocks();
 
   /**

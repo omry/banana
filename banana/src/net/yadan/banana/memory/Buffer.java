@@ -195,6 +195,11 @@ public class Buffer implements IBuffer {
   }
 
   @Override
+  public void setChars(int dst_offset, char[] src_data) {
+    setChars(dst_offset, src_data, 0, src_data.length);
+  }
+
+  @Override
   public void setChars(int dst_offset, char[] src_data, int src_pos, int length) {
     if (length == 0) {
       return;

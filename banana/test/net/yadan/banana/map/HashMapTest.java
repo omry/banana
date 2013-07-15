@@ -1,11 +1,14 @@
 package net.yadan.banana.map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import net.yadan.banana.DebugLevel;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.initializers.MemSetInitializer;
 import net.yadan.banana.memory.malloc.ChainedAllocator;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 
 public class HashMapTest {

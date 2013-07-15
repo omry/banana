@@ -20,7 +20,6 @@ public class HashMapExample {
     double loadFactor = 0.75;   // how full should the map be before incresing size and rehashing?
     double growthFactor = 2.0;  // if we run out of blocks in the underlying block allocator, grow it by what factor?
     IHashMap map = new HashMap(maxBlocks, blockSize, growthFactor, loadFactor);
-    map.getAllocator().setDebug(true);
     // create a new record, key is 1001. record data size is 5.
     int r1 = map.createRecord(1001, 5);
     // set some data into the record

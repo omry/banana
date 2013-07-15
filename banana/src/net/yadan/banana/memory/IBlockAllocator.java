@@ -12,7 +12,7 @@ package net.yadan.banana.memory;
  * @author omry
  * @created May 22, 2013
  */
-public interface IBlockAllocator extends IAllocator, IPrimitiveAccess {
+public interface IBlockAllocator extends IAllocator {
 
   /**
    * @return a single block of fixed size (based on the allocator block size)
