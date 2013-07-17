@@ -1,7 +1,6 @@
 Implement and test more primitive types in IPrimitiveAccess
 	char[]
 	double
-	float
 	
 Unified interface for collections and have all collections implement ICollection
 

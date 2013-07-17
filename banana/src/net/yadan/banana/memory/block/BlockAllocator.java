@@ -438,4 +438,14 @@ public class BlockAllocator implements IBlockAllocator {
   public int maximumCapacityFor(int pointer) {
     return m_blockSize;
   }
+
+  @Override
+  public float getFloat(int pointer, int offset) {
+    return Float.intBitsToFloat(getInt(pointer, offset));
+  }
+
+  @Override
+  public void setFloat(int pointer, int offset, float f) {
+    setInt(pointer, offset, Float.floatToIntBits(f));
+  }
 }

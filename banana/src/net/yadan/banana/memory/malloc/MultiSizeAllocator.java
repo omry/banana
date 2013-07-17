@@ -316,4 +316,14 @@ public class MultiSizeAllocator implements IMemAllocator {
     pointer = extractPointer(pointer);
     m_allocators[idx].setLowerShort(pointer, offset, s);
   }
+
+  @Override
+  public float getFloat(int pointer, int offset) {
+    return Float.intBitsToFloat(getInt(pointer, offset));
+  }
+
+  @Override
+  public void setFloat(int pointer, int offset, float f) {
+    setInt(pointer, offset, Float.floatToIntBits(f));
+  }
 }

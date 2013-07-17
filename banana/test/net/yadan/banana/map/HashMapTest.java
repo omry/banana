@@ -123,6 +123,17 @@ public class HashMapTest {
   }
 
   @Test
+  public void testFloatData() {
+    IHashMap h = create(10, 0.75f);
+    int pointer = h.createRecord(1000, BLOCK_SIZE);
+    h.setFloat(pointer, 0, 9999);
+    assertEquals(9999, h.getFloat(pointer, 0), Float.MIN_VALUE);
+
+    h.setFloat(pointer, 1, 800);
+    assertEquals(800, h.getFloat(pointer, 1), Float.MIN_VALUE);
+  }
+
+  @Test
   public void testRemove() {
     IHashMap h = create(10, 0.75f);
     int pointer = h.createRecord(1000, BLOCK_SIZE);

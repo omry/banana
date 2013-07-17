@@ -98,6 +98,36 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   }
 
   @Test
+  public void testSetGetFloat() {
+    a = create(3, 2);
+    int p1 = a.malloc();
+    int p2 = a.malloc();
+    int p3 = a.malloc();
+    assertEquals(0, a.freeBlocks());
+
+    a.setFloat(p1, 0, 1);
+    a.setFloat(p1, 1, 2);
+
+    a.setFloat(p2, 0, Float.MIN_NORMAL);
+    a.setFloat(p2, 1, Float.MAX_VALUE);
+
+    a.setFloat(p3, 0, Float.NEGATIVE_INFINITY);
+    a.setFloat(p3, 1, Float.POSITIVE_INFINITY);
+
+    assertEquals(1, a.getFloat(p1, 0), Float.MIN_VALUE);
+    assertEquals(2, a.getFloat(p1, 1), Float.MIN_VALUE);
+
+    assertEquals(Float.MIN_NORMAL, a.getFloat(p2, 0), Float.MIN_VALUE);
+    assertEquals(Float.MAX_VALUE, a.getFloat(p2, 1), Float.MIN_VALUE);
+
+    assertEquals(Float.NEGATIVE_INFINITY, a.getFloat(p3, 0), Float.MIN_VALUE);
+    assertEquals(Float.POSITIVE_INFINITY, a.getFloat(p3, 1), Float.MIN_VALUE);
+    a.free(p1);
+    a.free(p2);
+    a.free(p3);
+  }
+
+  @Test
   public void testUpperShort() {
     a = create(3, 1);
     int p = a.malloc();

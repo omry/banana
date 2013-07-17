@@ -216,6 +216,16 @@ public class HashMap implements IHashMap {
   }
 
   @Override
+  public void setFloat(int record_id, int offset, float f) {
+    m_memory.setFloat(record_id, offset + USER_DATA_OFFSET, f);
+  }
+
+  @Override
+  public float getFloat(int record_id, int offset) {
+    return m_memory.getFloat(record_id, offset + USER_DATA_OFFSET);
+  }
+
+  @Override
   public long getLong(int record_id, int offset_in_data) {
     return m_memory.getLong(record_id, offset_in_data + USER_DATA_OFFSET);
   }

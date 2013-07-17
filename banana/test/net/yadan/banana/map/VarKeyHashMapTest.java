@@ -1,5 +1,9 @@
 package net.yadan.banana.map;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import net.yadan.banana.DebugLevel;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
@@ -9,8 +13,6 @@ import net.yadan.banana.memory.initializers.MemSetInitializer;
 import net.yadan.banana.memory.malloc.ChainedAllocator;
 
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 
 public class VarKeyHashMapTest {
@@ -157,6 +159,19 @@ public class VarKeyHashMapTest {
     int pointer = h.createRecord(key, BLOCK_SIZE);
     h.setInt(pointer, 0, Integer.MAX_VALUE);
     assertEquals(Integer.MAX_VALUE, h.getInt(pointer, 0));
+
+    h.setInt(pointer, 1, 800);
+    assertEquals(800, h.getInt(pointer, 1));
+  }
+
+  @Test
+  public void testFloatData() {
+    IVarKeyHashMap h = create(10, 0.75f);
+    IBuffer key = new Buffer(10);
+    key.appendChars((PREFIX + 1000).toCharArray());
+    int pointer = h.createRecord(key, BLOCK_SIZE);
+    h.setFloat(pointer, 0, Integer.MAX_VALUE);
+    assertEquals(Integer.MAX_VALUE, h.getFloat(pointer, 0), Float.MIN_VALUE);
 
     h.setInt(pointer, 1, 800);
     assertEquals(800, h.getInt(pointer, 1));

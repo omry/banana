@@ -113,6 +113,20 @@ public abstract class AbstractMemAllocatorTest {
   }
 
   @Test
+  public void tesfloatAccess() {
+    int pointer = m.malloc(m_allocationSize);
+    for (int i = 0; i < m_allocationSize; i++) {
+      m.setFloat(pointer, i, i * 2f);
+    }
+
+    for (int i = 0; i < m_allocationSize; i++) {
+      assertEquals(i * 2f, m.getFloat(pointer, i), Float.MIN_VALUE);
+    }
+
+    m.free(pointer);
+  }
+
+  @Test
   public void testLong() {
     int p = m.malloc(10);
     m.setLong(p, 0, 0x00000000ffffffffL);

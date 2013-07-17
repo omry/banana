@@ -110,6 +110,17 @@ public class LinkedListTest {
   }
 
   @Test
+  public void testFloatInt() {
+    ILinkedList list = createList(3, 2, 0);
+    int link = list.insertHead(2);
+    list.setFloat(link, 0, 10);
+    list.setFloat(link, 1, 11);
+
+    assertEquals(10, list.getFloat(link, 0), Float.MIN_VALUE);
+    assertEquals(11, list.getFloat(link, 1), Float.MIN_VALUE);
+  }
+
+  @Test
   public void testSetInts() {
     ILinkedList list = createList(3, 5, 0);
     int link1 = list.insertHead(5);

@@ -9,29 +9,97 @@ package net.yadan.banana.memory;
 public interface IPrimitiveAccess {
 
   /**
-   * @param pointer pointer to read int from
-   * @param offset_in_data offset in data to read from
+   * Gets the lower 16 bit short from the specified offset
+   * 
+   * @param pointer
+   *          pointer to read from
+   * @param offset
+   *          offset of int to get short from
+   * @return
+   */
+  public short getLowerShort(int pointer, int offset);
+
+  /**
+   * Sets the lower (Least significant) 16 bit short in the int at the offset
+   * 
+   * @param pointer
+   *          pointer to write into
+   * @param offset
+   *          offset to write to
+   * 
+   * @param s
+   *          short to write
+   */
+  public void setLowerShort(int pointer, int offset, int s);
+
+
+  /**
+   * Gets the upper 16 bit short from the specified offset
+   * 
+   * @param pointer
+   *          pointer to read from
+   * @param offset
+   *          offset of int to get short from
+   * @return
+   */
+  public short getUpperShort(int pointer, int offset);
+
+  /**
+   * Sets the upper (Most significant) 16 bit short in the int at the offset
+   * 
+   * @param pointer
+   *          pointer to write into
+   * @param offset
+   *          offset to write to
+   * 
+   * @param s
+   *          short to write
+   */
+  public void setUpperShort(int pointer, int offset, int s);
+  
+  /**
+   * @param pointer
+   *          pointer to read from
+   * @param offset
+   *          offset in pointer to read from
+   * 
+   * @return
+   */
+  public float getFloat(int pointer, int offset);
+  
+  /**
+   * @param pointer
+   *          pointer to write to
+   * @param offset
+   *          offset in pointer to write to
+   * @param f
+   *          float value to write
+   */
+  public void setFloat(int pointer, int offset, float f);
+
+  /**
+   * @param pointer
+   *          pointer to read int from
+   * @param offset_in_data
+   *          offset in data to read from
    */
   public int getInt(int pointer, int offset_in_data);
 
   /**
-   * @param pointer pointer to read int from
-   * @param offset_in_data offset in data to write to
-   * @param data the int to write
+   * @param pointer
+   *          pointer to read int from
+   * @param offset_in_data
+   *          offset in data to write to
+   * @param data
+   *          the int to write
    */
   public void setInt(int pointer, int offset_in_data, int data);
 
-  public short getUpperShort(int pointer, int offset);
-
-  public short getLowerShort(int pointer, int offset);
-
-  public void setUpperShort(int pointer, int offset, int s);
-
-  public void setLowerShort(int pointer, int offset, int s);
-
   /**
-   * @param pointer pointer to read long from
-   * @param offset_in_data offset in data to read from
+   * @param pointer
+   *          pointer to read long from
+   * @param offset_in_data
+   *          offset in data to read from
    */
   public long getLong(int pointer, int offset_in_data);
 

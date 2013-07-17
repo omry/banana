@@ -325,4 +325,14 @@ public class DoubleLinkedList implements ILinkedList {
     return m_memory.maximumCapacityFor(link) - RESERVED_SIZE;
   }
 
+  @Override
+  public float getFloat(int link, int offset) {
+    return m_memory.getFloat(link, DATA_OFFSET + offset);
+  }
+
+  @Override
+  public void setFloat(int link, int offset, float f) {
+    m_memory.setFloat(link, DATA_OFFSET + offset, f);
+  }
+
 }

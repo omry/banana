@@ -615,4 +615,14 @@ public class ChainedAllocator implements IMemAllocator {
     retOffset = DATA_OFFSET + offset;
     return current;
   }
+
+  @Override
+  public float getFloat(int pointer, int offset) {
+    return Float.intBitsToFloat(getInt(pointer, offset));
+  }
+
+  @Override
+  public void setFloat(int pointer, int offset, float f) {
+    setInt(pointer, offset, Float.floatToIntBits(f));
+  }
 }
