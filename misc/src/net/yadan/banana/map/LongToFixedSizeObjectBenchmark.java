@@ -1,11 +1,8 @@
 package net.yadan.banana.map;
 
-<<<<<<< HEAD
-=======
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
->>>>>>> benchmark
 import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryMXBean;
 import java.lang.management.MemoryUsage;
@@ -14,10 +11,6 @@ import net.yadan.utils.Util;
 
 public class LongToFixedSizeObjectBenchmark {
 
-<<<<<<< HEAD
-  public static void main(String[] args) {
-    int max = 25 * 1000 * 1000;
-=======
   private static float banana_insert_rate;
   private static float fastutil_insert_rate;
   private static long banana_used;
@@ -28,7 +21,6 @@ public class LongToFixedSizeObjectBenchmark {
   public static void main(String[] args) {
     int MILLION = 1000 * 1000;
     int max = 25 * MILLION;
->>>>>>> benchmark
     int keys[] = new int[max];
     for (int i = 0; i < max; i++) {
       keys[i] = i;
@@ -36,16 +28,6 @@ public class LongToFixedSizeObjectBenchmark {
     System.out.print("Shuffling...");
     Util.shuffleArray(keys);
     System.out.println("Done");
-<<<<<<< HEAD
-
-    long t = System.currentTimeMillis();
-    testBanana(keys);
-    System.out.println("Banana elapsed : " + (System.currentTimeMillis() - t) + " ms");
-
-    t = System.currentTimeMillis();
-    testJava(keys);
-    System.out.println("Java elapsed : " + (System.currentTimeMillis() - t) + " ms");
-=======
     long t, e;
 
     System.out.println(max / MILLION + " million items");
@@ -73,7 +55,6 @@ public class LongToFixedSizeObjectBenchmark {
         banana_insert_rate,
         java_used, fastutil_used, banana_used));
 
->>>>>>> benchmark
   }
 
 
@@ -96,22 +77,12 @@ public class LongToFixedSizeObjectBenchmark {
   public static int PORT_OFFSET = 6; // upper short
   public static int TYPE_OFFSET = 6; // lower short
 
-<<<<<<< HEAD
-  public static void testBanana(int keys[]) {
-=======
 
   public static int testBanana(int keys[]) {
->>>>>>> benchmark
     int num = keys.length;
 
     IHashMap h = new HashMap(num, RECORD_SIZE, 0, 1);
     for (int i = 0; i < keys.length; i++) {
-<<<<<<< HEAD
-      if (i % 3000000 == 0) {
-        System.out.println("Inserted " + i);
-      }
-=======
->>>>>>> benchmark
       int key = keys[i];
 
       int r = h.createRecord(key, RECORD_SIZE);
@@ -133,12 +104,6 @@ public class LongToFixedSizeObjectBenchmark {
     }
 
     System.gc();
-<<<<<<< HEAD
-    System.out.println(h.size());
-    MemoryMXBean mx = ManagementFactory.getMemoryMXBean();
-    MemoryUsage usage = mx.getHeapMemoryUsage();
-    System.out.println("Memory used by banana hashmap : " + usage.getUsed());
-=======
     MemoryMXBean mx = ManagementFactory.getMemoryMXBean();
     MemoryUsage usage = mx.getHeapMemoryUsage();
     banana_used = usage.getUsed() / (1024 * 1024);
@@ -146,7 +111,6 @@ public class LongToFixedSizeObjectBenchmark {
     // Util.formatSize(banana_used));
 
     return h.size();
->>>>>>> benchmark
   }
 
 
@@ -173,20 +137,10 @@ public class LongToFixedSizeObjectBenchmark {
     }
   }
 
-<<<<<<< HEAD
-  public static void testJava(int keys[]) {
-
-    java.util.HashMap<Long, JavaObject> h = new java.util.HashMap<Long, JavaObject>(keys.length, 1.0f);
-    for (int i = 0; i < keys.length; i++) {
-      if (i % 3000000 == 0) {
-        System.out.println("Inserted " + i);
-      }
-=======
   public static int testJava(int keys[]) {
 
     java.util.HashMap<Long, JavaObject> h = new java.util.HashMap<Long, JavaObject>(keys.length, 1.0f);
     for (int i = 0; i < keys.length; i++) {
->>>>>>> benchmark
       long key = keys[i];
       JavaObject o = new JavaObject(key);
       o.ipv6[0] = 1;
@@ -206,12 +160,6 @@ public class LongToFixedSizeObjectBenchmark {
     }
 
     System.gc();
-<<<<<<< HEAD
-    System.out.println(h.size());
-    MemoryMXBean mx = ManagementFactory.getMemoryMXBean();
-    MemoryUsage usage = mx.getHeapMemoryUsage();
-    System.out.println("Memory used by java hashmap : " + usage.getUsed());
-=======
     MemoryMXBean mx = ManagementFactory.getMemoryMXBean();
     MemoryUsage usage = mx.getHeapMemoryUsage();
     java_used = usage.getUsed() / (1024 * 1024);
@@ -250,6 +198,5 @@ public class LongToFixedSizeObjectBenchmark {
     // System.out.println("Memory used by fastutil Long2ObjectOpenHashMap : " +
     // Util.formatSize(fastutil_used));
     return h.size();
->>>>>>> benchmark
   }
 }
