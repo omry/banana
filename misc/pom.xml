@@ -28,10 +28,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.caliper</groupId>
-            <artifactId>caliper</artifactId>
-        </dependency>
-        <dependency>
             <groupId>it.unimi.dsi</groupId>
             <artifactId>fastutil</artifactId>
         </dependency>
@@ -46,6 +42,11 @@
         <dependency>
             <groupId>net.sf.trove4j</groupId>
             <artifactId>trove4j</artifactId>
+        </dependency>
+        <dependency>
+        	<groupId>ant</groupId>
+        	<artifactId>ant</artifactId>
+        	<version>1.7.0</version>
         </dependency>
     </dependencies>
 </project>
