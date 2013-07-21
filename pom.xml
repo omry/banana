@@ -52,7 +52,7 @@
         <air.check.fail-license>false</air.check.fail-license>
         <air.check.fail-pmd>false</air.check.fail-pmd>
 
-        <dep.caliper.version>1.0-beta-1</dep.caliper.version>
+        <dep.caliper.version>1.0-beta-SNAPSHOT</dep.caliper.version>
         <dep.fastutil.version>6.5.6</dep.fastutil.version>
         <dep.junit.version>4.11</dep.junit.version>
         <dep.junit-benchmark.version>0.7.0</dep.junit-benchmark.version>
