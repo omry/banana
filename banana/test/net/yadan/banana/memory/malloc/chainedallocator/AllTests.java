@@ -13,6 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
   ChainedComputeMemoryUsageTest.class,
   ChainedReallocTest.class,
   ChainedMemSetTest.class,
+  ChainedCharsTest.class,
 })
 //@formatter:on
 public class AllTests {

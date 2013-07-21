@@ -4,6 +4,8 @@ Implement and test more primitive types in IPrimitiveAccess
 	
 Unified interface for collections and have all collections implement ICollection
 
+Use BlockAllocator as an underlying storage of Buffer class
+
 evaluate interesting use cases enabled by compressed pointers
   more efficient MultiSize allocator
 optimize malloc/read/write/free allocators

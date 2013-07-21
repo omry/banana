@@ -894,4 +894,25 @@ public class TreeAllocator implements IMemAllocator {
     setInt(pointer, offset, Float.floatToIntBits(f));
   }
 
+  @Override
+  public double getDouble(int pointer, int offset_in_data) {
+    return Double.longBitsToDouble(getLong(pointer, offset_in_data));
+  }
+
+  @Override
+  public void setDouble(int pointer, int offset_in_data, double data) {
+    setLong(pointer, offset_in_data, Double.doubleToLongBits(data));
+  }
+
+  @Override
+  public void setChars(int pointer, int dst_offset, char[] src_data, int src_pos, int num_chars) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void getChars(int pointer, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
+    // TODO Auto-generated method stub
+
+  }
 }

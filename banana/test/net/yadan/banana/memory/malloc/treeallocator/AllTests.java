@@ -13,6 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
   TreeReallocTest.class,
   VarTests.class,
   TreeMemSetTest.class,
+  TreeCharsTest.class,
 })
 //@formatter:on
 public class AllTests {

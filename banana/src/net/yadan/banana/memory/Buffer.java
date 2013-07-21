@@ -7,7 +7,7 @@
 package net.yadan.banana.memory;
 
 public class Buffer implements IBuffer {
-
+  // TODO: Use BlockAllocator as an underlying storage
   private int m_buffer[];
   private int m_usedSize;
   private double m_growthFactor;
@@ -91,7 +91,7 @@ public class Buffer implements IBuffer {
   @Override
   public void setUpperShort(int offset, int v) {
     int newSize = Math.max(m_usedSize, offset + 1);
-    short lower = newSize > m_usedSize ? 0 : (short) (m_buffer[offset]);
+    int lower = newSize > m_usedSize ? 0 : m_buffer[offset] & 0x0000ffff;
     m_buffer[offset] = (v << 16) | lower;
     m_usedSize = newSize;
   }
@@ -99,10 +99,12 @@ public class Buffer implements IBuffer {
   @Override
   public void setLowerShort(int offset, int v) {
     int newSize = Math.max(m_usedSize, offset + 1);
-    short upper = newSize > m_usedSize ? 0 : (short) (m_buffer[offset] >>> 16);
-    m_buffer[offset] = upper << 16 | v;
+
+    int upper = newSize > m_usedSize ? 0 : m_buffer[offset] & 0xffff0000;
+    m_buffer[offset] = upper | (v & 0x0000ffff);
     m_usedSize = newSize;
   }
+
 
   @Override
   public int getInt(int offset) {

@@ -58,6 +58,8 @@ public interface IPrimitiveAccess {
   public void setUpperShort(int pointer, int offset, int s);
   
   /**
+   * Gets float (32bit) from the int at the specified offset
+   * 
    * @param pointer
    *          pointer to read from
    * @param offset
@@ -68,6 +70,8 @@ public interface IPrimitiveAccess {
   public float getFloat(int pointer, int offset);
   
   /**
+   * Sets float (32bit) on the int at the specified offset
+   * 
    * @param pointer
    *          pointer to write to
    * @param offset
@@ -96,6 +100,8 @@ public interface IPrimitiveAccess {
   public void setInt(int pointer, int offset_in_data, int data);
 
   /**
+   * Gets long (64bit) from the 2 ints starting at the specified offset
+   * 
    * @param pointer
    *          pointer to read long from
    * @param offset_in_data
@@ -104,11 +110,38 @@ public interface IPrimitiveAccess {
   public long getLong(int pointer, int offset_in_data);
 
   /**
-   * @param pointer pointer to read long from
-   * @param offset_in_data offset in data to write to
-   * @param data the long to write
+   * Sets long (64bit) onto the 2 ints starting at the specified offset
+   * 
+   * @param pointer
+   *          pointer to read long from
+   * @param offset_in_data
+   *          offset in data to write to
+   * @param data
+   *          the long to write
    */
   public void setLong(int pointer, int offset_in_data, long data);
+
+  /**
+   * Gets double (64bit) from the 2 ints starting at the specified offset
+   * 
+   * @param pointer
+   *          pointer to read double from
+   * @param offset_in_data
+   *          offset in data to read from
+   */
+  public double getDouble(int pointer, int offset_in_data);
+
+  /**
+   * Sets double (64bit) onto the 2 ints starting at the specified offset
+   * 
+   * @param pointer
+   *          pointer to read double from
+   * @param offset_in_data
+   *          offset in data to write to
+   * @param data
+   *          the double to write
+   */
+  public void setDouble(int pointer, int offset_in_data, double data);
 
   /**
    * Copy an int[] array into the buffer
@@ -135,40 +168,39 @@ public interface IPrimitiveAccess {
   public void getInts(int pointer, int src_offset_in_record,
       int dst_data[], int dst_pos, int length);
 
-  //
-  // /**
-  // * Copy a char[] array into the buffer
-  // *
-  // * @param pointer
-  // * destination pointer
-  // * @param dst_offset
-  // * offset in dest pointer (in ints)
-  // * @param src_data
-  // * source char[] data
-  // * @param src_pos
-  // * source position to start copy from (in chars)
-  // * @param length
-  // * number of chars to copy
-  // */
-  // public void setChars(int pointer, int dst_offset, char src_data[], int
-  // src_pos, int length);
-  //
-  // /**
-  // * Copy a char[] array from the buffer
-  // *
-  // * @param pointer
-  // * source pointer
-  // * @param src_offset
-  // * offset in source pointer (int ints)
-  // * @param dst_data
-  // * dest char[] data
-  // * @param dst_pos
-  // * dest position to copy to (in chars)
-  // * @param length
-  // * number of chars to copy
-  // */
-  // public void getChars(int pointer, int src_offset, char dst_data[], int
-  // dst_pos, int length);
+  /**
+   * Copy a char[] array into the buffer, each two chars will be copied into a
+   * single int in the underlying array.
+   * 
+   * @param pointer
+   *          destination pointer
+   * @param dst_offset
+   *          offset in dest pointer (in ints)
+   * @param src_data
+   *          source char[] data
+   * @param src_pos
+   *          source position to start copy from (in chars)
+   * @param num_chars
+   *          number of chars to copy
+   */
+  public void setChars(int pointer, int dst_offset, char src_data[], int src_pos, int num_chars);
+
+  /**
+   * Copy a char[] array from the buffer, each two chars will be copied from a
+   * single int in the underlying array.
+   * 
+   * @param pointer
+   *          source pointer
+   * @param src_offset
+   *          offset in source pointer (int ints)
+   * @param dst_data
+   *          dest char[] data
+   * @param dst_pos
+   *          dest position to copy to (in chars)
+   * @param num_chars
+   *          number of chars to copy
+   */
+  public void getChars(int pointer, int src_offset, char dst_data[], int dst_pos, int num_chars);
 
   /**
    * @param pointer

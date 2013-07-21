@@ -204,7 +204,7 @@ public class BlockAllocator implements IBlockAllocator {
     assert offset < m_blockSize : String.format("offset >= m_blockSize : %d >= %d", offset, m_blockSize);
 
     int off = pointer * m_blockSize + offset;
-    short lower = (short) m_buffer[off];
+    int lower = m_buffer[off] & 0x0000ffff;
     m_buffer[off] = (s << 16) | lower;
   }
 
@@ -215,8 +215,8 @@ public class BlockAllocator implements IBlockAllocator {
     assert offset < m_blockSize : String.format("offset >= m_blockSize : %d >= %d", offset, m_blockSize);
 
     int off = pointer * m_blockSize + offset;
-    short upper = (short) (m_buffer[off] >>> 16);
-    m_buffer[off] = upper << 16 | s;
+    int upper = m_buffer[off] & 0xffff0000;
+    m_buffer[off] = upper | (s & 0x0000ffff);
   }
 
   @Override
@@ -253,7 +253,7 @@ public class BlockAllocator implements IBlockAllocator {
     System.arraycopy(src_data, src_pos, m_buffer, pointer * m_blockSize + dst_offset_in_record,
         length);
   }
-
+  
   @Override
   public void getInts(int pointer, int src_offset_in_record,
       int dst_data[], int dst_pos, int length) {
@@ -272,13 +272,46 @@ public class BlockAllocator implements IBlockAllocator {
     System.arraycopy(m_buffer, pointer * m_blockSize + src_offset_in_record, dst_data, dst_pos,
         length);
   }
+  
+  @Override
+  public void setChars(int pointer, int dst_offset, char[] src_data, int src_pos, int num_chars) {
+    if (num_chars == 0) {
+      return;
+    }
+    int numInts = 1 + (num_chars - 1) / 2; // ceil(num_chars/2)
+    for (int i = dst_offset, src_index = src_pos, num_copied = 0; i < dst_offset + numInts; i++, src_index += 2) {
+      char c1 = src_data[src_index];
+      setUpperShort(pointer, i, c1);
+      num_copied++;
+      if (num_copied < num_chars) {
+        char c2 = src_data[src_index + 1];
+        setLowerShort(pointer, i, c2);
+        num_copied++;
+      }
+    }
+  }
+  
+  @Override
+  public void getChars(int pointer, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
+    if (num_chars == 0) {
+      return;
+    }
 
-
+    int numInts = 1 + (num_chars - 1) / 2; // ceil(length/2)
+    for (int i = src_offset, dst_index = dst_pos, num_copied = 0; i < src_offset + numInts; i++, dst_index += 2) {
+      dst_data[dst_index] = (char) getUpperShort(pointer, i);
+      num_copied++;
+      if (num_copied < num_chars) {
+        dst_data[dst_index + 1] = (char) getLowerShort(pointer, i);
+        num_copied++;
+      }
+    }
+  }
 
   @Override
-  public void getBuffer(int pointer, int src_offset_in_record, IBuffer dst, int length) {
-    getInts(pointer, src_offset_in_record, dst.array(), 0, length);
-    dst.setUsed(length);
+  public void getBuffer(int pointer, int src_offset_in_record, IBuffer dst, int num_chars) {
+    getInts(pointer, src_offset_in_record, dst.array(), 0, num_chars);
+    dst.setUsed(num_chars);
   }
 
   @Override
@@ -447,5 +480,15 @@ public class BlockAllocator implements IBlockAllocator {
   @Override
   public void setFloat(int pointer, int offset, float f) {
     setInt(pointer, offset, Float.floatToIntBits(f));
+  }
+
+  @Override
+  public double getDouble(int pointer, int offset_in_data) {
+    return Double.longBitsToDouble(getLong(pointer, offset_in_data));
+  }
+
+  @Override
+  public void setDouble(int pointer, int offset_in_data, double data) {
+    setLong(pointer, offset_in_data, Double.doubleToLongBits(data));
   }
 }

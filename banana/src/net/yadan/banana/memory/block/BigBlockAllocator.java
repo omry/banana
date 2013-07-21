@@ -279,7 +279,8 @@ public class BigBlockAllocator implements IBlockAllocator {
     int array_num = pointer / m_maxBlocksPerArray;
     int array_pointer = pointer % m_maxBlocksPerArray;
     int off = array_pointer * m_blockSize + offset;
-    short lower = (short) m_buffer[array_num][off];
+
+    int lower = m_buffer[array_num][off] & 0x0000ffff;
     m_buffer[array_num][off] = (s << 16) | lower;
   }
 
@@ -292,8 +293,9 @@ public class BigBlockAllocator implements IBlockAllocator {
     int array_num = pointer / m_maxBlocksPerArray;
     int array_pointer = pointer % m_maxBlocksPerArray;
     int off = array_pointer * m_blockSize + offset;
-    short upper = (short) (m_buffer[array_num][off] >>> 16);
-    m_buffer[array_num][off] = upper << 16 | s;
+
+    int upper = m_buffer[array_num][off] & 0xffff0000;
+    m_buffer[array_num][off] = upper | (s & 0x0000ffff);
   }
 
   @Override
@@ -545,5 +547,48 @@ public class BigBlockAllocator implements IBlockAllocator {
   @Override
   public void setFloat(int pointer, int offset, float f) {
     setInt(pointer, offset, Float.floatToIntBits(f));
+  }
+
+  @Override
+  public double getDouble(int pointer, int offset_in_data) {
+    return Double.longBitsToDouble(getLong(pointer, offset_in_data));
+  }
+
+  @Override
+  public void setDouble(int pointer, int offset_in_data, double data) {
+    setLong(pointer, offset_in_data, Double.doubleToLongBits(data));
+  }
+
+  @Override
+  public void setChars(int pointer, int dst_offset, char[] src_data, int src_pos, int num_chars) {
+    if (num_chars == 0) {
+      return;
+    }
+    int numInts = 1 + (num_chars - 1) / 2; // ceil(num_chars/2)
+    for (int i = dst_offset, src_index = src_pos, num_copied = 0; i < dst_offset + numInts; i++, src_index += 2) {
+      setUpperShort(pointer, i, src_data[src_index]);
+      num_copied++;
+      if (num_copied < num_chars) {
+        setLowerShort(pointer, i, src_data[src_index + 1]);
+        num_copied++;
+      }
+    }
+  }
+
+  @Override
+  public void getChars(int pointer, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
+    if (num_chars == 0) {
+      return;
+    }
+
+    int numInts = 1 + (num_chars - 1) / 2; // ceil(length/2)
+    for (int i = src_offset, dst_index = dst_pos, num_copied = 0; i < src_offset + numInts; i++, dst_index += 2) {
+      dst_data[dst_index] = (char) getUpperShort(pointer, i);
+      num_copied++;
+      if (num_copied < num_chars) {
+        dst_data[dst_index + 1] = (char) getLowerShort(pointer, i);
+        num_copied++;
+      }
+    }
   }
 }

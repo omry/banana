@@ -335,4 +335,25 @@ public class DoubleLinkedList implements ILinkedList {
     m_memory.setFloat(link, DATA_OFFSET + offset, f);
   }
 
+  @Override
+  public double getDouble(int link, int offset_in_data) {
+    return m_memory.getDouble(link, offset_in_data + DATA_OFFSET);
+  }
+
+  @Override
+  public void setDouble(int link, int offset_in_data, double data) {
+    m_memory.setDouble(link, offset_in_data + DATA_OFFSET, data);
+  }
+
+  @Override
+  public void setChars(int pointer, int dst_offset, char[] src_data, int src_pos, int num_chars) {
+    m_memory.setChars(pointer, dst_offset + DATA_OFFSET, src_data, src_pos, num_chars);
+  }
+
+  @Override
+  public void getChars(int pointer, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
+    m_memory.getChars(pointer, src_offset + DATA_OFFSET, dst_data, dst_pos, num_chars);
+  }
+
 }
+

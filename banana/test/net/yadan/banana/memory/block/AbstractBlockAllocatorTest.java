@@ -128,6 +128,36 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
   }
 
   @Test
+  public void testSetGetDouble() {
+    a = create(3, 4);
+    int p1 = a.malloc();
+    int p2 = a.malloc();
+    int p3 = a.malloc();
+    assertEquals(0, a.freeBlocks());
+
+    a.setDouble(p1, 0, 1);
+    a.setDouble(p1, 2, 2);
+
+    a.setDouble(p2, 0, Double.MIN_NORMAL);
+    a.setDouble(p2, 2, Double.MAX_VALUE);
+
+    a.setDouble(p3, 0, Double.NEGATIVE_INFINITY);
+    a.setDouble(p3, 2, Double.POSITIVE_INFINITY);
+
+    assertEquals(1, a.getDouble(p1, 0), Double.MIN_VALUE);
+    assertEquals(2, a.getDouble(p1, 2), Double.MIN_VALUE);
+
+    assertEquals(Double.MIN_NORMAL, a.getDouble(p2, 0), Double.MIN_VALUE);
+    assertEquals(Double.MAX_VALUE, a.getDouble(p2, 2), Double.MIN_VALUE);
+
+    assertEquals(Double.NEGATIVE_INFINITY, a.getDouble(p3, 0), Double.MIN_VALUE);
+    assertEquals(Double.POSITIVE_INFINITY, a.getDouble(p3, 2), Double.MIN_VALUE);
+    a.free(p1);
+    a.free(p2);
+    a.free(p3);
+  }
+
+  @Test
   public void testUpperShort() {
     a = create(3, 1);
     int p = a.malloc();
@@ -150,6 +180,132 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
     a.setLowerShort(p, 0, 99);
     assertEquals(99, a.getLowerShort(p, 0));
     assertEquals(0, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testUpperShortNeg() {
+    a = create(3, 1);
+    int p = a.malloc();
+    a.setInt(p, 0, 0);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.setUpperShort(p, 0, -1);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(-1, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testLowerShortNeg() {
+    a = create(3, 1);
+    int p = a.malloc();
+    a.setInt(p, 0, 0);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.setLowerShort(p, 0, -1);
+    assertEquals(-1, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testUpperShort_initialNeg() {
+    a = create(3, 1);
+    int p = a.malloc();
+    a.setInt(p, 0, -1);
+    assertEquals(-1, a.getLowerShort(p, 0));
+    assertEquals(-1, a.getUpperShort(p, 0));
+    a.setUpperShort(p, 0, 0);
+    assertEquals(-1, a.getLowerShort(p, 0));
+    assertEquals(0, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testLowerShort_initialNeg() {
+    a = create(3, 1);
+    int p = a.malloc();
+    a.setInt(p, 0, -1);
+    assertEquals(-1, a.getLowerShort(p, 0));
+    assertEquals(-1, a.getUpperShort(p, 0));
+    a.setLowerShort(p, 0, 0);
+    assertEquals(0, a.getLowerShort(p, 0));
+    assertEquals(-1, a.getUpperShort(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testCharsAccessFullBlock() {
+    a = create(3, 2);
+    int p = a.malloc();
+    char chars[] = new char[4];
+    char out[] = new char[4];
+
+    for (char a = 'a'; a - 'a' < 4; a++) {
+      chars[a - 'a'] = a;
+    }
+    a.setChars(p, 0, chars, 0, 4);
+
+    a.getChars(p, 0, out, 0, 4);
+
+    assertArrayEquals(chars, out);
+
+    a.free(p);
+  }
+
+  @Test
+  public void testCharsSetPartialBlock() {
+    a = create(3, 20);
+    // new blocks will be initialized with -1
+    a.setInitializer(new MemSetInitializer(-1));
+
+    int p = a.malloc(); // 20 ints
+    char chars[] = new char[20];
+    char out[] = new char[20];
+
+    for (char a = 'a'; a - 'a' < 20; a++) {
+      chars[a - 'a'] = a;
+    }
+    a.setChars(p, 5, chars, 0, 20);
+
+    a.getChars(p, 5, out, 0, 20);
+
+    assertArrayEquals(chars, out);
+    for (int i = 0; i < 5; i++) {
+      assertEquals(-1, a.getInt(p, i));
+    }
+
+    for (int i = 15; i < 20; i++) {
+      assertEquals(-1, a.getInt(p, i));
+    }
+
+    a.free(p);
+  }
+
+  @Test
+  public void testCharsAccessFullBlock_even() {
+    a = create(1, 2);
+    // new blocks will be initialized with -1
+    a.setInitializer(new MemSetInitializer(-1));
+
+    // set 19 chars, last int should be partial
+    int p = a.malloc();
+    int n = 3;
+    char chars[] = new char[n];
+    char out[] = new char[n];
+
+    for (char a = 'a'; a - 'a' < n; a++) {
+      chars[a - 'a'] = a;
+    }
+    a.setChars(p, 0, chars, 0, n);
+
+    a.getChars(p, 0, out, 0, n);
+
+    assertArrayEquals(chars, out);
+
+    assertEquals(-1, a.getLowerShort(p, 1));
+
     a.free(p);
   }
 
@@ -324,5 +480,10 @@ public abstract class AbstractBlockAllocatorTest extends TestSuite {
     } finally {
       a.free(p);
     }
+  }
+
+  @Override
+  public String toString() {
+    return a.toString();
   }
 }

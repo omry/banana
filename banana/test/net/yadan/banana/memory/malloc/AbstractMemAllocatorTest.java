@@ -113,7 +113,7 @@ public abstract class AbstractMemAllocatorTest {
   }
 
   @Test
-  public void tesfloatAccess() {
+  public void tesFloatAccess() {
     int pointer = m.malloc(m_allocationSize);
     for (int i = 0; i < m_allocationSize; i++) {
       m.setFloat(pointer, i, i * 2f);
@@ -121,6 +121,20 @@ public abstract class AbstractMemAllocatorTest {
 
     for (int i = 0; i < m_allocationSize; i++) {
       assertEquals(i * 2f, m.getFloat(pointer, i), Float.MIN_VALUE);
+    }
+
+    m.free(pointer);
+  }
+
+  @Test
+  public void tesDoubleAccess() {
+    int pointer = m.malloc(m_allocationSize);
+    for (int i = 0; i < m_allocationSize / 2; i++) {
+      m.setDouble(pointer, i * 2, i * 3f);
+    }
+
+    for (int i = 0; i < m_allocationSize / 2; i++) {
+      assertEquals(i * 3f, m.getDouble(pointer, i * 2), Float.MIN_VALUE);
     }
 
     m.free(pointer);
@@ -409,5 +423,10 @@ public abstract class AbstractMemAllocatorTest {
     } finally {
       m.free(p);
     }
+  }
+
+  @Override
+  public String toString() {
+    return m.toString();
   }
 }

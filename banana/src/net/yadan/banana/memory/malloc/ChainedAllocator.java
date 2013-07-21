@@ -625,4 +625,110 @@ public class ChainedAllocator implements IMemAllocator {
   public void setFloat(int pointer, int offset, float f) {
     setInt(pointer, offset, Float.floatToIntBits(f));
   }
+
+  @Override
+  public double getDouble(int pointer, int offset_in_data) {
+    return Double.longBitsToDouble(getLong(pointer, offset_in_data));
+  }
+
+  @Override
+  public void setDouble(int pointer, int offset_in_data, double data) {
+    setLong(pointer, offset_in_data, Double.doubleToLongBits(data));
+  }
+
+  @Override
+  public void setChars(int pointer, int dst_offset_in_record, char[] src_data, int src_pos, int num_chars) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+
+      int dataSizePerBlock = m_blockSize - DATA_OFFSET;
+      int current = ~pointer;
+
+      while (dst_offset_in_record > dataSizePerBlock) {
+        dst_offset_in_record -= dataSizePerBlock;
+        current = m_blocks.getInt(current, NEXT_OFFSET);
+      }
+
+      int num_ints = 1 + (num_chars - 1) / 2;
+      int chars_remaining = num_chars;
+      while (num_ints > 0) {
+        if (current == -1) {
+          throw new OutOfBoundsAccess("Accessing pointer beyond allocation size");
+        }
+
+        int copy_length;
+        int num_chars_to_copy;
+        int dst_offset = 0;
+        if (num_ints > dataSizePerBlock - dst_offset_in_record) {
+          copy_length = dataSizePerBlock - dst_offset_in_record;
+          dst_offset = dst_offset_in_record;
+          dst_offset_in_record = 0;
+        } else {
+          copy_length = num_ints - dst_offset_in_record;
+          dst_offset = dst_offset_in_record;
+        }
+        num_chars_to_copy = copy_length * 2;
+        if (num_chars_to_copy > chars_remaining) {
+          num_chars_to_copy = chars_remaining;
+        }
+
+        m_blocks.setChars(current, DATA_OFFSET + dst_offset, src_data, src_pos * 2, num_chars_to_copy);
+        num_ints -= copy_length;
+        src_pos += copy_length;
+        chars_remaining -= num_chars_to_copy;
+        current = m_blocks.getInt(current, NEXT_OFFSET);
+      }
+    } else {
+      m_blocks.setChars(pointer, dst_offset_in_record, src_data, src_pos, num_chars);
+    }
+  }
+
+  @Override
+  public void getChars(int pointer, int src_offset_in_record, char[] dst_data, int dst_pos, int num_chars) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+    if (pointer < 0) {
+      int dataSize = m_blockSize - DATA_OFFSET;
+      int current = ~pointer;
+
+      while (src_offset_in_record >= dataSize) {
+        src_offset_in_record -= dataSize;
+        current = m_blocks.getInt(current, NEXT_OFFSET);
+      }
+
+      int num_ints = 1 + (num_chars - 1) / 2;
+      int chars_remaining = num_chars;
+      while (num_ints > 0) {
+        if (current == -1) {
+          throw new OutOfBoundsAccess("Accessing pointer beyond allocation size");
+        }
+
+        int copy_length;
+        int num_chars_to_copy;
+        int src_offset = 0;
+        if (num_ints > dataSize - src_offset_in_record) {
+          copy_length = dataSize - src_offset_in_record;
+          src_offset = src_offset_in_record;
+          src_offset_in_record = 0;
+        } else {
+          copy_length = num_ints - src_offset_in_record;
+          src_offset = src_offset_in_record;
+        }
+
+        num_chars_to_copy = copy_length * 2;
+        if (num_chars_to_copy > chars_remaining) {
+          num_chars_to_copy = chars_remaining;
+        }
+
+        m_blocks.getChars(current, DATA_OFFSET + src_offset, dst_data, dst_pos * 2, num_chars_to_copy);
+        num_ints -= copy_length;
+        dst_pos += copy_length;
+        chars_remaining -= num_chars_to_copy;
+        current = m_blocks.getInt(current, NEXT_OFFSET);
+      }
+    } else {
+      m_blocks.getChars(pointer, src_offset_in_record, dst_data, dst_pos, num_chars);
+    }
+  }
 }
