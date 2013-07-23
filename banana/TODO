@@ -1,5 +1,6 @@
 Implement and test MemCopy for IMemAllocator
 Complete usage example for Map
+Complete and test ObjectsPool
 
 Unified interface for collections and have all collections implement ICollection
 
