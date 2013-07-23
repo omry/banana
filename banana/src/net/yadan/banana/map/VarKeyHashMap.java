@@ -244,6 +244,26 @@ public class VarKeyHashMap implements IVarKeyHashMap {
   }
 
   @Override
+  public double getDouble(int record_id, int offset_in_data) {
+    return m_valuesMemory.getDouble(record_id, offset_in_data + USER_DATA_OFFSET);
+  }
+
+  @Override
+  public void setDouble(int record_id, int offset_in_data, double data) {
+    m_valuesMemory.setDouble(record_id, offset_in_data + USER_DATA_OFFSET, data);
+  }
+
+  @Override
+  public void setChars(int record_id, int dst_offset, char[] src_data, int src_pos, int num_chars) {
+    m_valuesMemory.setChars(record_id, dst_offset + USER_DATA_OFFSET, src_data, src_pos, num_chars);
+  }
+
+  @Override
+  public void getChars(int record_id, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
+    m_valuesMemory.getChars(record_id, src_offset + USER_DATA_OFFSET, dst_data, dst_pos, num_chars);
+  }
+
+  @Override
   public long getLong(int record_id, int offset_in_data) {
     return m_valuesMemory.getLong(record_id, offset_in_data + USER_DATA_OFFSET);
   }

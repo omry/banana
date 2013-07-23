@@ -178,6 +178,19 @@ public class VarKeyHashMapTest {
   }
 
   @Test
+  public void testDoubleData() {
+    IVarKeyHashMap h = create(10, 0.75f);
+    IBuffer key = new Buffer(10);
+    key.appendChars((PREFIX + 1000).toCharArray());
+    int pointer = h.createRecord(key, BLOCK_SIZE);
+    h.setDouble(pointer, 0, 9999);
+    assertEquals(9999, h.getDouble(pointer, 0), Double.MIN_VALUE);
+
+    h.setDouble(pointer, 2, 800);
+    assertEquals(800, h.getDouble(pointer, 2), Double.MIN_VALUE);
+  }
+
+  @Test
   public void testRemove() {
     IVarKeyHashMap h = create(10, 0.75f);
     IBuffer key = new Buffer(10);

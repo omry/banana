@@ -226,6 +226,16 @@ public class HashMap implements IHashMap {
   }
 
   @Override
+  public double getDouble(int record_id, int offset_in_data) {
+    return m_memory.getDouble(record_id, offset_in_data + USER_DATA_OFFSET);
+  }
+
+  @Override
+  public void setDouble(int record_id, int offset_in_data, double data) {
+    m_memory.setDouble(record_id, offset_in_data + USER_DATA_OFFSET, data);
+  }
+
+  @Override
   public long getLong(int record_id, int offset_in_data) {
     return m_memory.getLong(record_id, offset_in_data + USER_DATA_OFFSET);
   }
@@ -236,22 +246,31 @@ public class HashMap implements IHashMap {
   }
 
   @Override
-  public void setInts(int pointer, int dst_offset_in_record,
+  public void setInts(int record_id, int dst_offset_in_record,
       int[] src_data, int src_pos, int length) {
-    m_memory.setInts(pointer, dst_offset_in_record + USER_DATA_OFFSET, src_data, src_pos, length);
+    m_memory.setInts(record_id, dst_offset_in_record + USER_DATA_OFFSET, src_data, src_pos, length);
   }
 
   @Override
-  public void getInts(int pointer, int src_offset_in_record,
+  public void getInts(int record_id, int src_offset_in_record,
       int[] dst_data, int dst_pos, int length) {
-    m_memory.getInts(pointer, src_offset_in_record + USER_DATA_OFFSET, dst_data, dst_pos, length);
+    m_memory.getInts(record_id, src_offset_in_record + USER_DATA_OFFSET, dst_data, dst_pos, length);
   }
 
   @Override
-  public void getBuffer(int pointer, int src_offset_in_record, IBuffer dst, int length) {
-    m_memory.getBuffer(pointer, USER_DATA_OFFSET + src_offset_in_record, dst, length);
+  public void getBuffer(int record_id, int src_offset_in_record, IBuffer dst, int length) {
+    m_memory.getBuffer(record_id, USER_DATA_OFFSET + src_offset_in_record, dst, length);
   }
 
+  @Override
+  public void setChars(int record_id, int dst_offset, char[] src_data, int src_pos, int num_chars) {
+    m_memory.setChars(record_id, dst_offset + USER_DATA_OFFSET, src_data, src_pos, num_chars);
+  }
+
+  @Override
+  public void getChars(int record_id, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
+    m_memory.getChars(record_id, src_offset + USER_DATA_OFFSET, dst_data, dst_pos, num_chars);
+  }
 
   @Override
   public boolean remove(long key) {

@@ -1,9 +1,9 @@
 package net.yadan.banana.memory;
 
-import org.junit.Test;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
 
 public class BufferTest {
 
@@ -136,6 +136,50 @@ public class BufferTest {
     b.setLowerShort(0, 99);
     assertEquals(99, b.getLowerShort(0));
     assertEquals(1, b.size());
+  }
+
+  @Test
+  public void testUpperShortNeg() {
+    IBuffer b = create(1);
+    b.setInt(0, 0);
+    assertEquals(0, b.getLowerShort(0));
+    assertEquals(0, b.getUpperShort(0));
+    b.setUpperShort(0, -1);
+    assertEquals(0, b.getLowerShort(0));
+    assertEquals(-1, b.getUpperShort(0));
+  }
+
+  @Test
+  public void testLowerShortNeg() {
+    IBuffer b = create(1);
+    b.setInt(0, 0);
+    assertEquals(0, b.getLowerShort(0));
+    assertEquals(0, b.getUpperShort(0));
+    b.setLowerShort(0, -1);
+    assertEquals(-1, b.getLowerShort(0));
+    assertEquals(0, b.getUpperShort(0));
+  }
+
+  @Test
+  public void testUpperShort_initialNeg() {
+    IBuffer b = create(1);
+    b.setInt(0, -1);
+    assertEquals(-1, b.getLowerShort(0));
+    assertEquals(-1, b.getUpperShort(0));
+    b.setUpperShort(0, 0);
+    assertEquals(-1, b.getLowerShort(0));
+    assertEquals(0, b.getUpperShort(0));
+  }
+
+  @Test
+  public void testLowerShort_initialNeg() {
+    IBuffer b = create(1);
+    b.setInt(0, -1);
+    assertEquals(-1, b.getLowerShort(0));
+    assertEquals(-1, b.getUpperShort(0));
+    b.setLowerShort(0, 0);
+    assertEquals(0, b.getLowerShort(0));
+    assertEquals(-1, b.getUpperShort(0));
   }
 
   @Test

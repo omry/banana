@@ -101,6 +101,33 @@ public class MultiSizeAllocatorTest {
   }
 
   @Test
+  public void testInt() {
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[] { 32, 64, 128 }, 2.0);
+    int p = a.malloc(10);
+    a.setInt(p, 0, 999);
+    assertEquals(999, a.getInt(p, 0));
+    a.free(p);
+  }
+
+  @Test
+  public void testFloat() {
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[] { 32, 64, 128 }, 2.0);
+    int p = a.malloc(10);
+    a.setFloat(p, 0, 999);
+    assertEquals(999, a.getFloat(p, 0), Float.MIN_VALUE);
+    a.free(p);
+  }
+
+  @Test
+  public void testDouble() {
+    MultiSizeAllocator a = new MultiSizeAllocator(1, new int[] { 32, 64, 128 }, 2.0);
+    int p = a.malloc(10);
+    a.setDouble(p, 0, 999);
+    assertEquals(999, a.getDouble(p, 0), Double.MIN_VALUE);
+    a.free(p);
+  }
+
+  @Test
   public void testInitialize() {
     MultiSizeAllocator a = new MultiSizeAllocator(1, new int[]{32, 64, 128}, 2.0);
     a.setInitializer(new MemSetInitializer(-1));

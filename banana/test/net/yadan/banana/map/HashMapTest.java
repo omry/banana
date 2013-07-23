@@ -134,6 +134,17 @@ public class HashMapTest {
   }
 
   @Test
+  public void testDoubleData() {
+    IHashMap h = create(10, 0.75f);
+    int pointer = h.createRecord(1000, BLOCK_SIZE);
+    h.setDouble(pointer, 0, 9999);
+    assertEquals(9999, h.getDouble(pointer, 0), Double.MIN_VALUE);
+
+    h.setDouble(pointer, 2, 800);
+    assertEquals(800, h.getDouble(pointer, 2), Double.MIN_VALUE);
+  }
+
+  @Test
   public void testRemove() {
     IHashMap h = create(10, 0.75f);
     int pointer = h.createRecord(1000, BLOCK_SIZE);
