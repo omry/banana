@@ -1,7 +1,6 @@
-Implement and test more primitive types in IPrimitiveAccess
-	char[]
-	double
-	
+Implement and test MemCopy for IMemAllocator
+Complete usage example for Map
+
 Unified interface for collections and have all collections implement ICollection
 
 Use BlockAllocator as an underlying storage of Buffer class
@@ -13,8 +12,6 @@ optimize malloc/read/write/free allocators
 Implement MultiList:
   tests
   
-Implement and test MemCopy for IMemAllocator
-Implement Double and Float in IPrimitiveAccess
 
 Implement Set
 

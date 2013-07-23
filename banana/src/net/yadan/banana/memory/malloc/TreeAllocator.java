@@ -445,7 +445,7 @@ public class TreeAllocator implements IMemAllocator {
       int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
 
       assert src_pos >= 0 : "Negative src_pos " + src_pos;
-      assert src_pos + length <= numBlocks * m_blockSize : String.format(
+      assert dst_offset_in_record + length <= numBlocks * m_blockSize : String.format(
           "src_pos + length > memSize : %d + %d < %d", src_pos, length, numBlocks * m_blockSize);
 
       int left_to_copy = length;
@@ -491,6 +491,129 @@ public class TreeAllocator implements IMemAllocator {
     }
   }
 
+  @Override
+  public void setChars(int pointer, int dst_int_offset, char[] src_char_data, int src_char_pos, int num_chars) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+
+    if (num_chars == 0) {
+      return;
+    }
+
+    if (pointer < 0) {
+      int numBlocks = m_blocks.getInt(~pointer, INDEX_NUM_BLOCKS_OFFSET);
+      int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
+      int num_ints = 1 + (num_chars - 1) / 2; // ceil (num_chars / 2)
+
+      assert src_char_pos >= 0 : "Negative src_pos " + src_char_pos;
+      assert dst_int_offset + num_ints <= numBlocks * m_blockSize : String
+          .format("dst_offset_in_record + num_ints > memSize : %d + %d < %d", dst_int_offset, num_ints, numBlocks
+              * m_blockSize);
+
+      int chars_left_to_copy = num_chars;
+      for (int src_offset_chars = src_char_pos; src_offset_chars < num_chars;) {
+
+        int num_ints_to_copy;
+        if (dst_int_offset % m_blockSize != 0) {
+          num_ints_to_copy = m_blockSize - dst_int_offset % m_blockSize;
+        } else {
+          if (chars_left_to_copy > m_blockSize) {
+            num_ints_to_copy = m_blockSize;
+          } else {
+            num_ints_to_copy = chars_left_to_copy;
+          }
+        }
+        int num_chars_to_copy = Math.min(num_ints_to_copy * 2, chars_left_to_copy);
+
+        int dataPtr = pointer;
+
+        int current_dst_offset = dst_int_offset;
+        int thisLevelCapacity = currentLevelCapacity;
+        while (dataPtr < 0) {
+          int directDataPtr = ~dataPtr;
+          int levelMemSize = m_blocks.getInt(directDataPtr, INDEX_NUM_BLOCKS_OFFSET) * m_blockSize;
+          int nextLevelCapacity = thisLevelCapacity / m_indexBlockCapacity;
+          while (nextLevelCapacity >= levelMemSize) {
+            nextLevelCapacity /= m_indexBlockCapacity;
+          }
+          int offset_in_index = current_dst_offset / nextLevelCapacity;
+          current_dst_offset = current_dst_offset % nextLevelCapacity;
+          dataPtr = m_blocks.getInt(directDataPtr, INDEX_DATA_OFFSET + offset_in_index);
+          thisLevelCapacity = nextLevelCapacity;
+        }
+
+        m_blocks.setChars(dataPtr, current_dst_offset, src_char_data, src_char_pos + src_offset_chars,
+            num_chars_to_copy);
+
+        src_offset_chars += num_chars_to_copy;
+        chars_left_to_copy -= num_chars_to_copy;
+        dst_int_offset += num_ints_to_copy;
+      }
+    } else {
+      m_blocks.setChars(pointer, dst_int_offset, src_char_data, src_char_pos, num_chars);
+    }
+  }
+
+  @Override
+  public void getChars(int pointer, int src_int_offset, char[] dst_char_data, int dst_char_pos, int num_chars) {
+    assert pointer != 0 : "Invalid pointer " + pointer;
+    assert pointer != -1 : "Invalid pointer " + pointer;
+
+    if (num_chars == 0) {
+      return;
+    }
+
+    if (pointer < 0) {
+      int numBlocks = m_blocks.getInt(~pointer, INDEX_NUM_BLOCKS_OFFSET);
+      int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
+      int num_ints = 1 + (num_chars - 1) / 2; // ceil (num_chars / 2)
+
+      assert dst_char_pos >= 0 : "Negative dst_pos " + dst_char_pos;
+      assert src_int_offset + num_ints <= numBlocks * m_blockSize : String.format(
+          "dst_pos + num_ints > memSize : %d + %d < %d", dst_char_pos, num_ints, numBlocks * m_blockSize);
+
+      int chars_left_to_copy = num_chars;
+      for (int dst_offset_chars = dst_char_pos; dst_offset_chars < num_chars;) {
+        int num_ints_to_copy;
+        if (src_int_offset % m_blockSize != 0) {
+          num_ints_to_copy = m_blockSize - src_int_offset % m_blockSize;
+        } else {
+          if (chars_left_to_copy > m_blockSize) {
+            num_ints_to_copy = m_blockSize;
+          } else {
+            num_ints_to_copy = chars_left_to_copy;
+          }
+        }
+        int num_chars_to_copy = Math.min(num_ints_to_copy * 2, chars_left_to_copy);
+
+        int dataPtr = pointer;
+
+        int current_src_offset = src_int_offset;
+        int thisLevelCapacity = currentLevelCapacity;
+        while (dataPtr < 0) {
+          int directDataPtr = ~dataPtr;
+          int levelMemSize = m_blocks.getInt(directDataPtr, INDEX_NUM_BLOCKS_OFFSET) * m_blockSize;
+          int nextLevelCapacity = thisLevelCapacity / m_indexBlockCapacity;
+          while (nextLevelCapacity >= levelMemSize) {
+            nextLevelCapacity /= m_indexBlockCapacity;
+          }
+          int offset_in_index = current_src_offset / nextLevelCapacity;
+          current_src_offset = current_src_offset % nextLevelCapacity;
+          dataPtr = m_blocks.getInt(directDataPtr, INDEX_DATA_OFFSET + offset_in_index);
+          thisLevelCapacity = nextLevelCapacity;
+        }
+
+        m_blocks.getChars(dataPtr, current_src_offset, dst_char_data, dst_char_pos + dst_offset_chars,
+            num_chars_to_copy);
+
+        dst_offset_chars += num_chars_to_copy;
+        chars_left_to_copy -= num_chars_to_copy;
+        src_int_offset += num_ints_to_copy;
+      }
+    } else {
+      m_blocks.getChars(pointer, src_int_offset, dst_char_data, dst_char_pos, num_chars);
+    }
+  }
 
   @Override
   public void memSet(int pointer, int src_pos, int length, int value) {
@@ -501,8 +624,8 @@ public class TreeAllocator implements IMemAllocator {
       int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
 
       assert src_pos >= 0 : "Negative src_pos " + src_pos;
-      assert src_pos + length <= numBlocks * m_blockSize : String.format(
-          "src_pos + length > memSize : %d + %d < %d", src_pos, length, numBlocks * m_blockSize);
+      assert src_pos + length <= numBlocks * m_blockSize : String.format("src_pos + length > memSize : %d + %d < %d",
+          src_pos, length, numBlocks * m_blockSize);
 
       int left_to_copy = length;
       int src1_offset = src_pos;
@@ -554,7 +677,7 @@ public class TreeAllocator implements IMemAllocator {
       int currentLevelCapacity = maximumCapacityForNumBlocks(numBlocks);
 
       assert dst_pos >= 0 : "Negative dst_pos " + dst_pos;
-      assert dst_pos + length <= numBlocks * m_blockSize : String.format(
+      assert src_offset_in_record + length <= numBlocks * m_blockSize : String.format(
           "dst_pos + length > memSize : %d + %d < %d", dst_pos, length, numBlocks * m_blockSize);
 
       int left_to_copy = length;
@@ -588,8 +711,7 @@ public class TreeAllocator implements IMemAllocator {
           thisLevelCapacity = nextLevelCapacity;
         }
 
-        m_blocks.getInts(dataPtr, current_src_offset, dst_data, dst_pos + dst_offset,
-            this_copy_length);
+        m_blocks.getInts(dataPtr, current_src_offset, dst_data, dst_pos + dst_offset, this_copy_length);
 
         dst_offset += this_copy_length;
         left_to_copy -= this_copy_length;
@@ -902,17 +1024,5 @@ public class TreeAllocator implements IMemAllocator {
   @Override
   public void setDouble(int pointer, int offset_in_data, double data) {
     setLong(pointer, offset_in_data, Double.doubleToLongBits(data));
-  }
-
-  @Override
-  public void setChars(int pointer, int dst_offset, char[] src_data, int src_pos, int num_chars) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void getChars(int pointer, int src_offset, char[] dst_data, int dst_pos, int num_chars) {
-    // TODO Auto-generated method stub
-
   }
 }
