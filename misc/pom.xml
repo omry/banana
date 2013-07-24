@@ -1,52 +1,47 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>net.yadan.banana</groupId>
-        <artifactId>banana-parent</artifactId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>net.yadan.banana</groupId>
+		<artifactId>banana-parent</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
 
-    <artifactId>banana-misc</artifactId>
-    <packaging>jar</packaging>
+	<artifactId>banana-misc</artifactId>
+	<packaging>jar</packaging>
 
-    <build>
-        <sourceDirectory>src</sourceDirectory>
-    </build>
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+	</build>
 
-    <properties>
-        <air.main.basedir>${project.parent.basedir}</air.main.basedir>
-        <source.version>1.6</source.version>
-        <target.version>1.6</target.version>
-    </properties>
+	<properties>
+		<air.main.basedir>${project.parent.basedir}</air.main.basedir>
+		<source.version>1.6</source.version>
+		<target.version>1.6</target.version>
+	</properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>net.yadan.banana</groupId>
-            <artifactId>banana</artifactId>
-        </dependency>
+	<dependencies>
+		<dependency>
+			<groupId>net.yadan.banana</groupId>
+			<artifactId>banana</artifactId>
+		</dependency>
 
-        <dependency>
-            <groupId>it.unimi.dsi</groupId>
-            <artifactId>fastutil</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.carrotsearch</groupId>
-            <artifactId>junit-benchmarks</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>net.sf.trove4j</groupId>
-            <artifactId>trove4j</artifactId>
-        </dependency>
-        <dependency>
-        	<groupId>ant</groupId>
-        	<artifactId>ant</artifactId>
-        	<version>1.7.0</version>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>it.unimi.dsi</groupId>
+			<artifactId>fastutil</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.trove4j</groupId>
+			<artifactId>trove4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>ant</groupId>
+			<artifactId>ant</artifactId>
+			<version>1.7.0</version>
+		</dependency>
+	</dependencies>
 </project>

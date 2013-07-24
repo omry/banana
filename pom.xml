@@ -1,158 +1,159 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>io.airlift</groupId>
-        <artifactId>airbase</artifactId>
-        <version>7</version>
-    </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>io.airlift</groupId>
+		<artifactId>airbase</artifactId>
+		<version>7</version>
+	</parent>
 
-    <groupId>net.yadan.banana</groupId>
-    <artifactId>banana-parent</artifactId>
-    <packaging>pom</packaging>
-    <version>0.1-SNAPSHOT</version>
+	<groupId>net.yadan.banana</groupId>
+	<artifactId>banana-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>0.1-SNAPSHOT</version>
 
-    <name>${project.artifactId}</name>
-    <description>A primitive collection library with it's own memory management</description>
-    <inceptionYear>2013</inceptionYear>
-    <url>https://github.com/omry/banana</url>
+	<name>${project.artifactId}</name>
+	<description>A primitive collection library with it's own memory management</description>
+	<inceptionYear>2013</inceptionYear>
+	<url>https://github.com/omry/banana</url>
 
-    <scm>
-        <connection>scm:git:git@github.com:omry/banana.git</connection>
-        <developerConnection>scm:git:git@github.com:omry/banana.git</developerConnection>
-        <url>https://github.com/omry/banana</url>
-    </scm>
+	<scm>
+		<connection>scm:git:git@github.com:omry/banana.git</connection>
+		<developerConnection>scm:git:git@github.com:omry/banana.git</developerConnection>
+		<url>https://github.com/omry/banana</url>
+	</scm>
 
-    <licenses>
-        <license>
-            <name>BSD 3-Clause</name>
-            <url>https://raw.github.com/omry/banana/master/BSD-LICENSE</url>
-        </license>
-    </licenses>
+	<licenses>
+		<license>
+			<name>BSD 3-Clause</name>
+			<url>https://raw.github.com/omry/banana/master/BSD-LICENSE</url>
+		</license>
+	</licenses>
 
-    <developers>
-        <developer>
-            <id>omry</id>
-            <name>Omry Yadan</name>
-            <email>omry@yadan.nry</email>
-            <roles>
-                <role>architect</role>
-                <role>developer</role>
-            </roles>
-        </developer>
-    </developers>
+	<developers>
+		<developer>
+			<id>omry</id>
+			<name>Omry Yadan</name>
+			<email>omry@yadan.nry</email>
+			<roles>
+				<role>architect</role>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
 
-    <organization/>
-    <distributionManagement/>
+	<organization />
+	<distributionManagement />
 
-    <properties>
-        <air.check.fail-enforcer>false</air.check.fail-enforcer>
-        <air.check.fail-findbugs>false</air.check.fail-findbugs>
-        <air.check.fail-license>false</air.check.fail-license>
-        <air.check.fail-pmd>false</air.check.fail-pmd>
+	<properties>
+		<air.check.skip-enforcer>true</air.check.skip-enforcer>
+		<air.check.fail-findbugs>false</air.check.fail-findbugs>
+		<air.check.fail-license>false</air.check.fail-license>
+		<air.check.fail-pmd>false</air.check.fail-pmd>
 
-        <dep.caliper.version>1.0-beta-SNAPSHOT</dep.caliper.version>
-        <dep.fastutil.version>6.5.6</dep.fastutil.version>
-        <dep.junit.version>4.11</dep.junit.version>
-        <dep.junit-benchmark.version>0.7.0</dep.junit-benchmark.version>
-        <dep.trove.version>3.0.3</dep.trove.version>
-        <source.version>1.6</source.version>
-        <target.version>1.6</target.version>
-    </properties>
+		<dep.caliper.version>1.0-beta-SNAPSHOT</dep.caliper.version>
+		<dep.fastutil.version>6.5.6</dep.fastutil.version>
+		<dep.junit.version>4.11</dep.junit.version>
+		<dep.junit-benchmark.version>0.7.0</dep.junit-benchmark.version>
+		<dep.trove.version>3.0.3</dep.trove.version>
+		<source.version>1.6</source.version>
+		<target.version>1.6</target.version>
+	</properties>
 
-    <build>
-        <defaultGoal>install</defaultGoal>
-        <plugins>
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <encoding>UTF-8</encoding>
-                    <source>${source.version}</source>
-                    <target>${target.version}</target>
-                </configuration>
-            </plugin>
+	<build>
+		<defaultGoal>package</defaultGoal>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<source>${source.version}</source>
+					<target>${target.version}</target>
+				</configuration>
+			</plugin>
 
-            <plugin>
-                <groupId>com.mycila.maven-license-plugin</groupId>
-                <artifactId>maven-license-plugin</artifactId>
-                <configuration>
-                    <header>LICENSE-HEADER</header>
-                </configuration>
-            </plugin>
+			<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration>
+					<header>LICENSE-HEADER</header>
+				</configuration>
+			</plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.4.1</version>
-            </plugin>
-        </plugins>
-    </build>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>2.4.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.8</version>
+			</plugin>
 
-    <profiles>
-        <profile>
-            <id>oss-release</id>
-            <properties>
-                <!-- tests run in the preparation step of the release -->
-                <skipTests>true</skipTests>
-            </properties>
-            <build>
-                <plugins>
-                    <!-- oss requires a javadoc jar. Build one when releasing. -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                    </plugin>
-                    <!-- Sign artifacts using gpg for oss upload -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
+		</plugins>
+	</build>
 
-    <modules>
-        <module>banana</module>
-        <module>misc</module>
-        <module>examples</module>
-    </modules>
+	<profiles>
+		<profile>
+			<id>oss-release</id>
+			<properties>
+				<!-- tests run in the preparation step of the release -->
+				<skipTests>true</skipTests>
+			</properties>
+			<build>
+				<plugins>
+					<!-- oss requires a javadoc jar. Build one when releasing. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+					</plugin>
+					<!-- Sign artifacts using gpg for oss upload -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>net.yadan.banana</groupId>
-                <artifactId>banana</artifactId>
-                <version>${project.version}</version>
-            </dependency>
+	<modules>
+		<module>banana</module>
+		<module>misc</module>
+		<module>examples</module>
+	</modules>
 
-            <dependency>
-                <groupId>com.google.caliper</groupId>
-                <artifactId>caliper</artifactId>
-                <version>${dep.caliper.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>it.unimi.dsi</groupId>
-                <artifactId>fastutil</artifactId>
-                <version>${dep.fastutil.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${dep.junit.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.carrotsearch</groupId>
-                <artifactId>junit-benchmarks</artifactId>
-                <version>${dep.junit-benchmark.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sf.trove4j</groupId>
-                <artifactId>trove4j</artifactId>
-                <version>${dep.trove.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>net.yadan.banana</groupId>
+				<artifactId>banana</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.google.caliper</groupId>
+				<artifactId>caliper</artifactId>
+				<version>${dep.caliper.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>it.unimi.dsi</groupId>
+				<artifactId>fastutil</artifactId>
+				<version>${dep.fastutil.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${dep.junit.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.sf.trove4j</groupId>
+				<artifactId>trove4j</artifactId>
+				<version>${dep.trove.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>

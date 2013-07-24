@@ -14,7 +14,7 @@ import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.block.BigBlockAllocator;
 import net.yadan.banana.memory.block.BlockAllocator;
-import net.yadan.banana.memory.malloc.ChainedAllocator;
+import net.yadan.banana.memory.malloc.TreeAllocator;
 
 
 /**
@@ -59,7 +59,7 @@ public class HashMap implements IHashMap {
     } else {
       blocks = new BlockAllocator(maxBlocks, HashMap.RESERVED_SIZE + blockSize, growthFactor);
     }
-    init(new ChainedAllocator(blocks), maxBlocks, loadFactor);
+    init(new TreeAllocator(blocks), maxBlocks, loadFactor);
   }
 
   public HashMap(IMemAllocator memory, int initialCapacity, double loadFactor) {

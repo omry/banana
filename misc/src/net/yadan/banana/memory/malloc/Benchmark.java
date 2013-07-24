@@ -6,22 +6,20 @@
  */
 package net.yadan.banana.memory.malloc;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
-import net.yadan.banana.memory.IMemAllocator;
-import net.yadan.banana.memory.initializers.MemSetInitializer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TestRule;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
+import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import static org.junit.Assert.assertEquals;
+import net.yadan.banana.memory.IMemAllocator;
+import net.yadan.banana.memory.initializers.MemSetInitializer;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(value = Parameterized.class)
 public class Benchmark {
@@ -33,9 +31,6 @@ public class Benchmark {
 
   IMemAllocator m_treeIntAllocator;
   ChainedAllocator m_chainedIntAllocator;
-
-  @Rule
-  public TestRule benchmarkRun = new BenchmarkRule();
 
   public Benchmark(int blockSize, int varSizeAllocationSize) {
     BLOCK_SIZE = blockSize;

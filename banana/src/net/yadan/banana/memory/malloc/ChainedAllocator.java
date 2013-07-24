@@ -46,7 +46,6 @@ public class ChainedAllocator implements IMemAllocator {
   }
 
   public ChainedAllocator(IBlockAllocator blocks) {
-
     m_blocks = blocks;
     m_blockSize = blocks.blockSize();
   }

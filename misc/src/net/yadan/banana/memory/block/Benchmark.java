@@ -6,25 +6,20 @@
  */
 package net.yadan.banana.memory.block;
 
-import com.carrotsearch.junitbenchmarks.BenchmarkRule;
+import java.util.Arrays;
+import java.util.Collection;
+
 import net.yadan.banana.memory.IBlockAllocator;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 @RunWith(value = Parameterized.class)
 public class Benchmark {
-
-  @Rule
-  public TestRule benchmarkRun = new BenchmarkRule();
 
   int m_pointers[];
   IBlockAllocator m_blocks;

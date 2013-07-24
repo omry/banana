@@ -40,10 +40,15 @@ public class TreeAllocator implements IMemAllocator {
   }
 
   public TreeAllocator(int maxBlocks, int blockSize, double growthFactor, MemInitializer initializer) {
-    m_blockSize = blockSize;
-    m_indexBlockCapacity = m_blockSize - INDEX_DATA_OFFSET;
-    m_blocks = new BlockAllocator(maxBlocks, blockSize, growthFactor, initializer);
+    this(new BlockAllocator(maxBlocks, blockSize, growthFactor, initializer));
   }
+
+  public TreeAllocator(IBlockAllocator blocks) {
+    m_blockSize = blocks.blockSize();
+    m_indexBlockCapacity = m_blockSize - INDEX_DATA_OFFSET;
+    m_blocks = blocks;
+  }
+
 
   @Override
   public int malloc(int size) throws OutOfMemoryException {
@@ -876,8 +881,7 @@ public class TreeAllocator implements IMemAllocator {
   public int maximumCapacityFor(int pointer) {
     int capacity = 0;
     if (pointer < 0) {
-      int indexPointer = ~pointer;
-      return m_blockSize * m_blocks.getInt(indexPointer, INDEX_NUM_BLOCKS_OFFSET);
+      capacity = m_blockSize * m_blocks.getInt(~pointer, INDEX_NUM_BLOCKS_OFFSET);
     } else {
       capacity = m_blocks.blockSize();
     }
