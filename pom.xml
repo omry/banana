@@ -50,12 +50,7 @@
 		<air.check.fail-findbugs>false</air.check.fail-findbugs>
 		<air.check.fail-license>false</air.check.fail-license>
 		<air.check.fail-pmd>false</air.check.fail-pmd>
-
-		<dep.caliper.version>1.0-beta-SNAPSHOT</dep.caliper.version>
-		<dep.fastutil.version>6.5.6</dep.fastutil.version>
 		<dep.junit.version>4.11</dep.junit.version>
-		<dep.junit-benchmark.version>0.7.0</dep.junit-benchmark.version>
-		<dep.trove.version>3.0.3</dep.trove.version>
 		<source.version>1.6</source.version>
 		<target.version>1.6</target.version>
 	</properties>
@@ -132,27 +127,11 @@
 				<artifactId>banana</artifactId>
 				<version>${project.version}</version>
 			</dependency>
-
-			<dependency>
-				<groupId>com.google.caliper</groupId>
-				<artifactId>caliper</artifactId>
-				<version>${dep.caliper.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>it.unimi.dsi</groupId>
-				<artifactId>fastutil</artifactId>
-				<version>${dep.fastutil.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>${dep.junit.version}</version>
 				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>net.sf.trove4j</groupId>
-				<artifactId>trove4j</artifactId>
-				<version>${dep.trove.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
