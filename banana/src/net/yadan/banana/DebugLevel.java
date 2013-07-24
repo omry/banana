@@ -7,7 +7,19 @@
 package net.yadan.banana;
 
 public enum DebugLevel  {
+
+  /**
+   * No formatting for content of structure (default)
+   */
   NONE,
+
+  /**
+   * Format the content of the data structure nicely.
+   */
   DEBUG_CONTENT,
+
+  /**
+   * Formats the structure of the data structure nicely
+   */
   DEBUG_STRUCTURE
 }
