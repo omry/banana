@@ -1,9 +1,11 @@
-package net.yadan.banana;
+package net.yadan.banana.utils;
 
+import net.yadan.banana.DebugLevel;
 import net.yadan.banana.map.IVarKeyHashMap;
 import net.yadan.banana.map.VarKeyHashMapVisitor;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
+import net.yadan.banana.utils.TextIndex;
 
 import org.junit.After;
 import org.junit.Before;

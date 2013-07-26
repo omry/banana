@@ -11,8 +11,7 @@ import org.junit.runners.Suite.SuiteClasses;
   net.yadan.banana.list.AllTests.class,
   net.yadan.banana.map.AllTests.class,
   net.yadan.banana.stack.AllTests.class,
-  LRUTest.class,
-  TextIndexTest.class,
+  net.yadan.banana.utils.AllTests.class,
 })
 //@formatter:on
 public class AllTests {

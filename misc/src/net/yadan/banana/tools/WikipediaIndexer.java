@@ -6,14 +6,15 @@
  */
 package net.yadan.banana.tools;
 
-import net.yadan.banana.TextIndex;
 import net.yadan.banana.map.IVarKeyHashMap;
 import net.yadan.banana.map.VarKeyHashMapVisitorAdapter;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
+import net.yadan.banana.utils.TextIndex;
 import net.yadan.utils.Histogram;
 import net.yadan.utils.RateCounter;
 import net.yadan.utils.Util;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -21,6 +22,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;

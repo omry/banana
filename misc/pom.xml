@@ -31,14 +31,9 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		
-<!-- 
-		<dependency>
-			<groupId>com.google.caliper</groupId>
-			<artifactId>caliper</artifactId>
-			<version>1.0-beta-SNAPSHOT</version>
-		</dependency>
- -->
+
+		<!-- <dependency> <groupId>com.google.caliper</groupId> <artifactId>caliper</artifactId> 
+			<version>1.0-beta-SNAPSHOT</version> </dependency> -->
 
 		<dependency>
 			<groupId>it.unimi.dsi</groupId>
@@ -58,5 +53,10 @@
 			<version>1.7.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>nf.fr.eraasoft</groupId>
+			<artifactId>objectpool</artifactId>
+			<version>1.1.2</version>
+		</dependency>
 	</dependencies>
 </project>

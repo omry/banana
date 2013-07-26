@@ -1,6 +1,7 @@
-package net.yadan.banana;
+package net.yadan.banana.utils;
 
 import static org.junit.Assert.assertEquals;
+import net.yadan.banana.utils.LRU;
 
 public class LRUBenchmark {
   public static void main(String[] args) {

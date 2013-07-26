@@ -4,8 +4,9 @@
  *
  * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
  */
-package net.yadan.banana;
+package net.yadan.banana.utils;
 
+import net.yadan.banana.DebugLevel;
 import net.yadan.banana.map.IVarKeyHashMap;
 import net.yadan.banana.map.VarKeyHashMap;
 import net.yadan.banana.memory.Buffer;

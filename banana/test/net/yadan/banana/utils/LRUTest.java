@@ -1,4 +1,6 @@
-package net.yadan.banana;
+package net.yadan.banana.utils;
+
+import net.yadan.banana.utils.LRU;
 
 import org.junit.Test;
 
