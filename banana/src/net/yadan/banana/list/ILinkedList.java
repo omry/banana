@@ -11,7 +11,7 @@ import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.IPrimitiveAccess;
 
-public interface ILinkedList extends  ICollection, IPrimitiveAccess {
+public interface ILinkedList extends ICollection, IPrimitiveAccess {
 
   /**
    * Inserts a new head for the list
@@ -107,7 +107,7 @@ public interface ILinkedList extends  ICollection, IPrimitiveAccess {
    * Returns the link before the specified link Note that this is only
    * implemented for Bi-Directional list, and will throw an
    * {@link UnsupportedOperationException} for LinkedList
-   *
+   * 
    * @param link
    * @return
    */

@@ -1,10 +1,12 @@
 package net.yadan.banana.stack;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import net.yadan.banana.memory.Buffer;
 import net.yadan.banana.memory.IBuffer;
-import org.junit.Test;
 
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 public class StackTest {
 
@@ -31,6 +33,7 @@ public class StackTest {
       fail("pushed more than 2");
     } catch (Exception e) {
     }
+
   }
 
   @Test

@@ -2,8 +2,7 @@ Complete and test ObjectsPool
 
 Support Initializers for multiblock IMemAllocators (variable length allcoation)
 
-
-Unified interface for collections and have all collections implement ICollection
+Make API's get get allocated memory vs used memroy clear
 
 Look into more traditional IMemAllocators implementations
 
@@ -13,10 +12,6 @@ evaluate interesting use cases enabled by compressed pointers
   more efficient MultiSize allocator
 optimize malloc/read/write/free allocators
   
-Implement MultiList:
-  tests
-  
-
 Implement Set
 
 Memory allocation:
