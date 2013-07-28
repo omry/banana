@@ -1,9 +1,13 @@
-Implement and test MemCopy for IMemAllocator
 Complete and test ObjectsPool
+
+Support Initializers for multiblock IMemAllocators (variable length allcoation)
+
 
 Unified interface for collections and have all collections implement ICollection
 
-Use BlockAllocator as an underlying storage of Buffer class
+Look into more traditional IMemAllocators implementations
+
+Consider using BlockAllocator as an underlying storage of Buffer class
 
 evaluate interesting use cases enabled by compressed pointers
   more efficient MultiSize allocator

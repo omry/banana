@@ -1,12 +1,11 @@
 package net.yadan.banana.memory.block;
 
+import static org.junit.Assert.assertEquals;
 import net.yadan.banana.memory.IBlockAllocator;
 import net.yadan.banana.memory.MemInitializer;
 import net.yadan.banana.memory.initializers.MemSetInitializer;
-import org.junit.Test;
 
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 
 public class BigBlockAllocatorTest extends AbstractBlockAllocatorTest {
@@ -136,77 +135,5 @@ public class BigBlockAllocatorTest extends AbstractBlockAllocatorTest {
     for (int i = 0; i < a.maxBlocks(); i++) {
       a.free(pointers[i]);
     }
-  }
-
-  @Test
-  public void testMemCopy_fullblock_diffArrays() {
-    a = create(8, 5, 0, null);
-
-    int[] data = new int[] { 1, 2, 3, 4, 5 };
-    int[] expected = new int[] { 1, 2, 3, 4, 5 };
-    int[] out = new int[5];
-
-    int a1_1 = a.malloc();
-    a.malloc();
-    a.malloc();
-    a.malloc();
-    int a2_1 = a.malloc();
-
-    a.setInts(a1_1, 0, data, 0, a.blockSize());
-    a.memCopy(a1_1, 0, a2_1, 0, a.blockSize());
-
-    a.getInts(a2_1, 0, out, 0, a.blockSize());
-
-    assertArrayEquals(expected, out);
-
-    a.clear();
-  }
-
-  @Test
-  public void testMemCopy_same_offset_diffArrays() {
-    a = create(8, 5, 0, null);
-
-    int[] data = new int[] { 1, 2, 3, 4, 5 };
-    int[] expected = new int[] { 0, 2, 3, 4, 5 };
-    int[] out = new int[5];
-
-    int a1_1 = a.malloc();
-    a.malloc();
-    a.malloc();
-    a.malloc();
-    int a2_1 = a.malloc();
-
-    a.setInts(a1_1, 0, data, 0, a.blockSize());
-    a.memCopy(a1_1, 1, a2_1, 1, a.blockSize() - 1);
-
-    a.getInts(a2_1, 0, out, 0, a.blockSize());
-
-    assertArrayEquals(expected, out);
-
-    a.clear();
-  }
-
-  @Test
-  public void testMemCopy_diff_offset_diffArrays() {
-    a = create(8, 5, 0, null);
-
-    int[] data = new int[] { 1, 2, 3, 4, 5 };
-    int[] expected = new int[] { 0, 1, 2, 3, 4 };
-    int[] out = new int[5];
-
-    int a1_1 = a.malloc();
-    a.malloc();
-    a.malloc();
-    a.malloc();
-    int a2_1 = a.malloc();
-
-    a.setInts(a1_1, 0, data, 0, a.blockSize());
-    a.memCopy(a1_1, 0, a2_1, 1, a.blockSize() - 1);
-
-    a.getInts(a2_1, 0, out, 0, a.blockSize());
-
-    assertArrayEquals(expected, out);
-
-    a.clear();
   }
 }

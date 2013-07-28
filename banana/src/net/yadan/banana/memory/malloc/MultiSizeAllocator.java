@@ -277,12 +277,6 @@ public class MultiSizeAllocator implements IMemAllocator {
   }
 
   @Override
-  public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public void memSet(int pointer, int srcPos, int length, int value) {
     int idx = getSizeIndex(pointer);
     pointer = extractPointer(pointer);

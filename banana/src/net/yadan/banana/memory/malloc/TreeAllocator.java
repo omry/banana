@@ -978,16 +978,6 @@ public class TreeAllocator implements IMemAllocator {
     }
   }
 
-  @Override
-  public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {
-    assert srcPtr != 0;
-    assert srcPtr != -1;
-    assert dstPtr != 0;
-    assert dstPtr != -1;
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
-  }
-
   // this is super ugly, but since nothing here is thread safe anyway it's okay.
   int retOffset;
   // TODO: can this be iterative? can we eliminate the call to

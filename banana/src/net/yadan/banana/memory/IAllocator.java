@@ -23,16 +23,6 @@ public interface IAllocator extends IPrimitiveAccess {
   public void free(int pointer);
 
   /**
-   * Copies memory from point pointer to another within this allocator
-   * @param srcPtr source pointer
-   * @param srcPos source pointer position
-   * @param dstPtr dest pointer
-   * @param dstPos dest pointer position
-   * @param length number of ints to copy
-   */
-  public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length);
-
-  /**
    * Sets the memory pointed to by a specific pointer
    * @param pointer pointer pointing to memory we want to set
    * @param srcPos source position

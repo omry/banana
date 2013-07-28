@@ -544,16 +544,6 @@ public class ChainedAllocator implements IMemAllocator {
   }
 
   @Override
-  public void memCopy(int srcPtr, int srcPos, int dstPtr, int dstPos, int length) {
-    assert srcPtr != 0;
-    assert srcPtr != -1;
-    assert dstPtr != 0;
-    assert dstPtr != -1;
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   public short getUpperShort(int pointer, int offset) {
     assert pointer != 0 : "Invalid pointer " + pointer;
     assert pointer != -1 : "Invalid pointer " + pointer;
