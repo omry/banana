@@ -2,8 +2,6 @@ package net.yadan.banana.list;
 
 import net.yadan.banana.DebugLevel;
 import net.yadan.banana.Formatter;
-import net.yadan.banana.memory.Buffer;
-import net.yadan.banana.memory.IBuffer;
 import net.yadan.banana.memory.IPrimitiveAccess;
 
 /**
@@ -52,35 +50,32 @@ public class FormattingListElements {
     final int NAME_SIZE_OFFSET = 1;
     final int NAME_OFFSET = 2;
 
-    IBuffer link = new Buffer(20);
     // lets prepare 4 bananas of type Small=Green
     char[] chars = "Small-Green".toCharArray();
-    link.setInt(NUM_OFFSET, 4);
-    link.setInt(NAME_SIZE_OFFSET, chars.length);
-    link.setChars(NAME_OFFSET, chars);
 
     // make it the head head of the list
-    list.insertHead(link);
+    int r = list.insertHead(NAME_OFFSET + (int) Math.ceil(chars.length / 2.0));
+    list.setInt(r, NUM_OFFSET, 4);
+    list.setInt(r, NAME_SIZE_OFFSET, chars.length);
+    list.setChars(r, NAME_OFFSET, chars, 0, chars.length);
 
     // lets prepare 2 bananas of type Big-Yellow-Of-The-Best-Kind
-    link.reset(); // reset link so we can reuse it
-    chars = "Big-Yellow-Of-The-Best-Kind".toCharArray();
-    link.setInt(NUM_OFFSET, 2);
-    link.setInt(NAME_SIZE_OFFSET, chars.length);
-    link.setChars(NAME_OFFSET, chars);
-
     // make it the new head of the list
-    list.insertHead(link);
+    chars = "Big-Yellow-Of-The-Best-Kind".toCharArray();
+    r = list.insertHead(NAME_OFFSET + (int) Math.ceil(chars.length / 2.0));
+    list.setInt(r, NUM_OFFSET, 2);
+    list.setInt(r, NAME_SIZE_OFFSET, chars.length);
+    list.setChars(r, NAME_OFFSET, chars, 0, chars.length);
 
     list.setDebug(DebugLevel.DEBUG_CONTENT);
     System.out.println(list.toString());
 
     /**
-     * Outputs the not very useful: LinkedList (2 records)
+     * Outputs the not very useful:
      * 
      * <pre>
      * LinkedList (2 records)
-     * [2,1b,420069,67002d,590065,6c006c,6f0077,2d004f,66002d,540068,65002d,420065,730074,2d004b,69006e,640000,0] -> [4,b,53006d,61006c,6c002d,470072,650065,6e0000,0,0,0]
+     * [2,27,4325481,6750253,5832805,7077996,7274615,2949199,6684717,5505128,6619181,4325477,7536756,2949195,6881390,6553600,0] -> [4,11,5439597,6357100,7077933,4653170,6619237,7208960,0,0,0]
      * </pre>
      * 
      * Lets try to make the debug output friendlier
@@ -97,15 +92,9 @@ public class FormattingListElements {
       public String format(IPrimitiveAccess parent, int pointer) {
         int num = parent.getInt(pointer, NUM_OFFSET);
         int nameCharsLength = parent.getInt(pointer, NAME_SIZE_OFFSET);
-
-        // quick and efficient ceil(a/b) to get number of ints rounded up.
-        int nameLen = 1 + (nameCharsLength - 1) / 2;
-
-        // temp buffer to hold name
-        Buffer name = new Buffer(nameLen);
-        parent.getBuffer(pointer, NAME_OFFSET, name, nameLen);
+        // we could potentially reuse this chars array to improve performance
         char chars[] = new char[nameCharsLength];
-        name.getChars(0, chars, 0, chars.length);
+        parent.getChars(pointer, NAME_OFFSET, chars, 0, chars.length);
         return String.format("[#%d Bananas of type %s]", num, new String(chars));
       }
     });
