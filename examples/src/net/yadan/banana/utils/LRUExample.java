@@ -8,7 +8,7 @@ public class LRUExample {
     int maxCapacity = 5;
     LRU lru = new LRU(maxCapacity, DataType.OBJECT);
 
-    // adding 10 items to an LRU with size 5 with leave the last 10 items i
+    // adding 10 items to an LRU with size 5 with leave the last 5 items in
     for (int i = 0; i < 10; i++) {
       long key = i;
       lru.add(key, "Hello " + i);
