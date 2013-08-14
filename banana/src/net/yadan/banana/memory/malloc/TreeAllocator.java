@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 omry <omry@yadan.net>
+ * Copyright (C) 2013 Omry Yadan <omry@yadan.net>
  * All rights reserved.
  *
  * See https://github.com/omry/banana/blob/master/BSD-LICENSE for licensing information
