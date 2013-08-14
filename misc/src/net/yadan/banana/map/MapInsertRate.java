@@ -29,7 +29,7 @@ public class MapInsertRate {
 
     float lf = 0.96f;
     int max = 1 * 1000 * 1000 * 1000; // 1b
-    max = 400 * 1000 * 1000;
+    max = 50 * 1000 * 1000;
     System.out.print("Initializing " + Util.formatNum(max) + " keys sequence...");
     int keys[] = new int[max];
     for (int i = 0; i < max; i++) {
@@ -58,7 +58,7 @@ public class MapInsertRate {
     // System.gc();
     // Thread.sleep(5000);
     //
-    // javaMapRate(keys, lf);
+    javaMapRate(keys, lf);
 //
 //    System.gc();
 //    Thread.sleep(5000);
@@ -75,20 +75,19 @@ public class MapInsertRate {
     System.out.println("java.util.HashMap init : " + (System.currentTimeMillis() - start));
 
     // SET
-    int PRINT_BLOCK = 1000000;
+    int PRINT_BLOCK = max / 10;
     start = System.currentTimeMillis();
     long last_print = -1;
     for (int i = 0; i < max; i++) {
       if (i % PRINT_BLOCK == 0) {
-        System.out.println("java.util.HashMap : Inserted " + i);
         if (last_print != -1) {
           long e = System.currentTimeMillis() - last_print;
           double rate = PRINT_BLOCK / (e / 1000f);
           System.out.println(String.format(
               "java.util.HashMap : Inserted %s items in %d ms, rate %s/sec ", Util.formatNum(i), e,
               Util.formatNum(rate)));
-          last_print = System.currentTimeMillis();
         }
+        last_print = System.currentTimeMillis();
       }
       map.put((long) keys[i], (long) i);
     }
@@ -111,7 +110,7 @@ public class MapInsertRate {
         }
         last_print = System.currentTimeMillis();
       }
-      long n = map.get(keys[i]);
+      long n = map.get((long) keys[i]);
       if (i != n) {
         throw new RuntimeException("java.util.HashMap : Invalid value in map");
       }
@@ -206,7 +205,7 @@ public class MapInsertRate {
         }
         last_print = System.currentTimeMillis();
       }
-      map.put((long) keys[i], (long) i);
+      map.put(keys[i], i);
     }
 
     long elapsed = System.currentTimeMillis() - start;
