@@ -1,6 +1,8 @@
+Test HashSet (similar to var key hashmap tests)
+
 Complete and test ObjectsPool
 
-Support Initializers for multiblock IMemAllocators (variable length allcoation)
+Support Initializers for multiblock IMemAllocators (variable length allocation)
 
 Make API's get get allocated memory vs used memroy clear
 

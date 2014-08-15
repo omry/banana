@@ -375,7 +375,7 @@ public class VarKeyHashMap implements IVarKeyHashMap {
     int capacity = getCapacity();
     long newCapacity = Math.max(capacity + 1, (long) (capacity * m_growthFactor));
     if (newCapacity > Integer.MAX_VALUE) {
-      throw new IllegalStateException("Attempted to resize list to " + newCapacity
+      throw new IllegalStateException("Attempted to resize table to " + newCapacity
           + " which is greated than Integer.MAX_VALUE");
     }
     int intCap = (int) newCapacity;
