@@ -44,6 +44,19 @@ public interface IVarKeyHashMap extends ICollection, IPrimitiveAccess {
   public int getCapacity();
 
   /**
+   * This function is used in conjuction with visitRecords. it Reads the data of
+   * a key referenced by keyPtr into the output buffer. Note: assumes the keyPtr
+   * is a valid key pointer. behavior is undefined if keyPtr is pointing to an
+   * actual key in this map.
+   * 
+   * @param keyPtr
+   *          pointer to key
+   * @param outKey
+   *          stores key data in this IBuffer
+   */
+  public void getKeyData(int keyPtr, IBuffer outKey);
+
+  /**
    * @return number of records used in this hash-map
    */
   @Override

@@ -325,4 +325,20 @@ public class VarKeyHashMapTest {
     int r = h.createRecord(key, size);
     h.setInts(r, 0, new int[size], 0, size);
   }
+  
+  @Test
+  public void testGetKeyData() {
+    final IVarKeyHashMap h = create(10, 0.8);
+    final IBuffer key = new Buffer(10);
+    key.appendInts(new int[]{1,2,3});
+    h.createRecord(key, BLOCK_SIZE);
+    h.visitRecords(new VarKeyHashMapVisitorAdapter() {
+      @Override
+      public void visit(IVarKeyHashMap map, int keyPtr, int valuePtr, long num, long total) {
+        IBuffer out = new Buffer(1);
+        h.getKeyData(keyPtr, out);
+        assertEquals(key, out);
+      }
+    });
+  }
 }

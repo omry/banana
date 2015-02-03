@@ -440,7 +440,7 @@ public class VarKeyHashMap implements IVarKeyHashMap {
 
     if (m_debugLevel == DebugLevel.DEBUG_CONTENT) {
       s.append("\n");
-      visitRecords(new VarKeyHashMapVisitor() {
+      visitRecords(new VarKeyHashMapVisitorAdapter() {
         @Override
         public void visit(IVarKeyHashMap map, int keyPtr, int valuePtr, long num, long total) {
           IMemAllocator keys = map.keysMemory();
@@ -458,14 +458,6 @@ public class VarKeyHashMap implements IVarKeyHashMap {
             }
           }
           s.append("=").append(m_formatter.format(map, valuePtr));
-        }
-
-        @Override
-        public void end(IVarKeyHashMap map) {
-        }
-
-        @Override
-        public void begin(IVarKeyHashMap map) {
         }
       });
     } else if (m_debugLevel == DebugLevel.DEBUG_STRUCTURE) {
@@ -505,6 +497,15 @@ public class VarKeyHashMap implements IVarKeyHashMap {
     }
 
     return s.toString();
+  }
+  
+  @Override
+  public void getKeyData(int keyPtr, IBuffer key) {
+    int keySize = m_keysMemory.getInt(keyPtr, KEY_SIZE_OFFSET);
+    key.reset();
+    key.ensureCapacity(keySize);
+    m_keysMemory.getInts(keyPtr, KEY_DATA_OFFSET, key.array(), 0, keySize);
+    key.setUsed(keySize);
   }
 
   @Override

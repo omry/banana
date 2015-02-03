@@ -67,7 +67,8 @@ public class Buffer implements IBuffer {
         throw new OutOfMemoryException("Buffer is configured to not grow (growthFactor = 0)");
       }
 
-      int newBuf[] = new int[(int) (capacity * m_growthFactor)];
+      int newSize = Math.max(numInts, (int) (capacity * m_growthFactor));
+      int newBuf[] = new int[newSize];
       System.arraycopy(m_buffer, 0, newBuf, 0, m_buffer.length);
       m_buffer = newBuf;
     }
@@ -173,6 +174,24 @@ public class Buffer implements IBuffer {
       h = 31 * h + m_buffer[i];
     }
     return h;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof IBuffer) {
+      IBuffer buff = (IBuffer) obj;
+      if (buff.size() == size()) {
+        for (int i = 0; i < size(); i++) {
+          if (m_buffer[i] != buff.array()[i])
+            return false;
+        }
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
   }
 
   @Override
