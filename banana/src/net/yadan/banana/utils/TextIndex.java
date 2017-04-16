@@ -21,9 +21,9 @@ public class TextIndex {
   private static final int DOC_LIST_BLOCK_SIZE = 10;
   private static final int INITIAL_DOC_LIST_SIZE = DOC_LIST_BLOCK_SIZE
       - VarKeyHashMap.RESERVED_SIZE;
-  public static int DOC_LIST_ALLOCATION_SIZE_OFFSET = 0;
-  public static int DOC_LIST_SIZE_OFFSET = 1;
-  private static int DOC_LIST_DATA_OFFSET = 2;
+  public static final int DOC_LIST_ALLOCATION_SIZE_OFFSET = 0;
+  public static final int DOC_LIST_SIZE_OFFSET = 1;
+  private static final int DOC_LIST_DATA_OFFSET = 2;
   // private static double DOC_LIST_GROWTH_FACTOR = 1.2;
 
   private int MAX_WORD_LENGTH = 30;
@@ -120,7 +120,7 @@ public class TextIndex {
     return numWords;
   }
 
-  int EMPTY[] = new int[0];
+//  int EMPTY[] = new int[0];
 
   public int[] find(String word) {
     m_keyBuffer.reset();

@@ -354,7 +354,7 @@ public class BigBlockAllocator implements IBlockAllocator {
     int array_pointer = pointer % m_maxBlocksPerArray;
 
     assert array_pointer * m_blockSize < buffer.length : String.format(
-        "pointer >= m_buffer.length : %d < 0", array_pointer, buffer.length);
+        "pointer >= m_buffer.length : %d < %d", array_pointer, buffer.length);
     assert src_offset_in_record >= 0 : String.format("src_offset_in_record < 0 : %d < 0",
         src_offset_in_record);
     assert src_offset_in_record < m_blockSize : String.format(

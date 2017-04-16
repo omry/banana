@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>io.airlift</groupId>
 		<artifactId>airbase</artifactId>
-		<version>7</version>
+		<version>62</version>
 	</parent>
 
 	<groupId>net.yadan.banana</groupId>
@@ -47,9 +47,11 @@
 
 	<properties>
 		<air.check.skip-enforcer>true</air.check.skip-enforcer>
-		<air.check.fail-findbugs>false</air.check.fail-findbugs>
 		<air.check.fail-license>false</air.check.fail-license>
+		 <air.check.skip-pmd>true</air.check.skip-pmd>
+		<air.check.skip-findbugs>true</air.check.skip-findbugs>
 		<air.check.fail-pmd>false</air.check.fail-pmd>
+		<air.check.fail-modernizer>false</air.check.fail-modernizer>
 		<dep.junit.version>4.11</dep.junit.version>
 		<source.version>1.6</source.version>
 		<target.version>1.6</target.version>
@@ -60,7 +62,6 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
 				<configuration>
 					<encoding>UTF-8</encoding>
 					<source>${source.version}</source>
@@ -69,24 +70,12 @@
 			</plugin>
 
 			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
 				<configuration>
 					<header>LICENSE-HEADER</header>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.4.1</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.8</version>
-			</plugin>
-
 		</plugins>
 	</build>
 

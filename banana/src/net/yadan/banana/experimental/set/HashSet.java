@@ -53,6 +53,7 @@ public class HashSet implements ISet {
     }
 
     m_formatter = new DefaultFormatter();
+    m_memory = memory;
   }
 
   @Override

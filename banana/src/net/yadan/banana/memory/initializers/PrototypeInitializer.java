@@ -18,7 +18,8 @@ public class PrototypeInitializer implements MemInitializer {
   }
 
   public PrototypeInitializer(int prototype_[]) {
-    prototype = prototype_;
+    prototype = new int[prototype_.length];
+    System.arraycopy(prototype_, 0, prototype, 0, prototype_.length);
   }
 
   @Override

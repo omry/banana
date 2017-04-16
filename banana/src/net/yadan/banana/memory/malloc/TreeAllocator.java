@@ -216,16 +216,13 @@ public class TreeAllocator implements IMemAllocator {
           free(removedBlock2);
           break;
         } else {
-
+          // p < 0, index pointer
           m_blocks.setInt(rootPtr, INDEX_NUM_BLOCKS_OFFSET, numBlocks - 1);
           int nextLevelMemSize = m_blocks.getInt(~p, INDEX_NUM_BLOCKS_OFFSET) * m_blockSize;
           if (nextLevelMemSize - m_blockSize == m_blockSize) {
-            // index block referncing two data blocks, removal of one data block
-            // will
-            // cause removal of index block
-
-            int removedBlock1 = p;
-            removedBlock1 = removedBlock1 > 0 ? removedBlock1 : ~removedBlock1;
+            // index block referencing two data blocks, removal of one data block
+            // will cause removal of index block
+            int removedBlock1 = ~p;
             int removedBlock2 = m_blocks.getInt(removedBlock1, INDEX_DATA_OFFSET + 1);
             int preservedBlock = m_blocks.getInt(removedBlock1, INDEX_DATA_OFFSET + 0);
             m_blocks.setInt(rootPtr, INDEX_DATA_OFFSET + blockNum, preservedBlock);

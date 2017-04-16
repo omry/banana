@@ -14,10 +14,9 @@ import net.yadan.banana.memory.IMemAllocator;
 import net.yadan.banana.memory.MemInitializer;
 import net.yadan.banana.memory.block.BlockAllocator;
 
-
 /**
  * Variable length int's allocator.
- *
+ * 
  * @author omry
  * @created May 2, 2013
  */
@@ -36,7 +35,8 @@ public class MultiSizeAllocator implements IMemAllocator {
   }
 
   public MultiSizeAllocator(int numInitialBlocks, int sizes[], double growthFactor) {
-    m_sizes = sizes;
+    m_sizes = new int[sizes.length];
+    System.arraycopy(sizes, 0, m_sizes, 0, sizes.length);
     // if you don't have two sizes just use IntAllocator
     if (m_sizes.length < 2)
       throw new IllegalArgumentException("Need at least two sizes");
@@ -140,8 +140,8 @@ public class MultiSizeAllocator implements IMemAllocator {
   int findAllocatorFor(int size) {
     int i = Arrays.binarySearch(m_sizes, size);
     if (i == -(m_sizes.length + 1)) {
-      throw new IllegalArgumentException("Requested an allocation of unsupported size " + size
-          + ", max " + m_sizes[m_sizes.length - 1]);
+      throw new IllegalArgumentException("Requested an allocation of unsupported size " + size + ", max "
+          + m_sizes[m_sizes.length - 1]);
     }
     if (i < 0) {
       return (-i) - 1;

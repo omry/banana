@@ -260,7 +260,7 @@ public class BlockAllocator implements IBlockAllocator {
 
     assert pointer >= 0 : "Negative pointer : " + pointer;
     assert pointer * m_blockSize < m_buffer.length : String.format(
-        "pointer >= m_buffer.length : %d < 0", pointer, m_buffer.length);
+        "pointer >= m_buffer.length : %d < %d", pointer, m_buffer.length);
     assert src_offset_in_record >= 0 : String.format("src_offset_in_record < 0 : %d < 0",
         src_offset_in_record);
     assert src_offset_in_record < m_blockSize : String.format(
