@@ -52,7 +52,7 @@
 		<air.check.skip-findbugs>true</air.check.skip-findbugs>
 		<air.check.fail-pmd>false</air.check.fail-pmd>
 		<air.check.fail-modernizer>false</air.check.fail-modernizer>
-		<dep.junit.version>4.11</dep.junit.version>
+		<dep.junit.version>4.13.1</dep.junit.version>
 		<source.version>1.6</source.version>
 		<target.version>1.6</target.version>
 	</properties>
